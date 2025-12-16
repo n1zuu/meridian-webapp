@@ -1,0 +1,9 @@
+/* src/input.css - This is the primary CSS input file */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can also add your own custom CSS here */
+.my-custom-style {
+  @apply text-xl font-bold;
+}
