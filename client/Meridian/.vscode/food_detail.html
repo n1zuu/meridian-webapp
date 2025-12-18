@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Detail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'teal-custom': '#2eae96',
+                        'orange-custom': '#d4954a',
+                        'yellow-custom': '#f5a623',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-md mx-auto bg-white min-h-screen">
+        <!-- Header -->
+        <div class="bg-white px-6 py-4 flex items-center">
+            <button class="mr-4" onclick="window.location.href='waiter_dashboard.html'">
+                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            <h1 id="foodTitle" class="text-xl font-semibold text-orange-custom">Loading...</h1>
+        </div>
+
+        <!-- Main Content -->
+        <div class="relative">
+            <!-- Image Section with White Background -->
+            <div class="bg-white px-6 pt-4">
+                <div class="flex justify-center">
+                    <img 
+                        id="foodImage"
+                        src="https://placehold.co/300x300?text=Loading" 
+                        alt="Food item"
+                        class="w-80 h-80 object-cover rounded-full"
+                        onerror="this.src='https://placehold.co/300x300?text=Food+Item'"
+                    />
+                </div>
+            </div>
+
+            <!-- Teal Background Section -->
+            <div class="bg-teal-custom px-6 pb-8 pt-16 min-h-[400px]">
+                <!-- Product Info -->
+                <div class="mt-8">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 id="foodName" class="text-2xl font-bold text-white">Loading...</h2>
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-yellow-custom fill-current" viewBox="0 0 20 20">
+                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                            </svg>
+                            <span id="foodRating" class="text-white ml-1 text-sm font-semibold">0</span>
+                        </div>
+                    </div>
+
+                    <p id="foodDescription" class="text-white text-sm leading-relaxed mb-6 opacity-95">
+                        Loading description...
+                    </p>
+
+                    <div class="text-white text-3xl font-bold mb-8">
+                        $<span id="foodPrice">0.00</span>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex items-center gap-4">
+                        <!-- Quantity Selector -->
+                        <div class="flex items-center bg-yellow-custom rounded-full px-6 py-3 gap-8">
+                            <button id="decrementBtn" class="text-white text-2xl font-bold hover:scale-110 transition-transform">−</button>
+                            <span id="quantity" class="text-white text-xl font-semibold min-w-[20px] text-center">0</span>
+                            <button id="incrementBtn" class="text-white text-2xl font-bold hover:scale-110 transition-transform">+</button>
+                        </div>
+
+                        <!-- Cart Button -->
+                        <button id="cartBtn" class="bg-white rounded-full px-6 py-3 flex items-center gap-2 hover:bg-gray-50 transition-colors">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                            </svg>
+                            <span id="cartCount" class="text-gray-700 font-semibold text-lg">0</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load food data from sessionStorage
+        const foodData = JSON.parse(sessionStorage.getItem('selectedFood'));
+        
+        if (foodData) {
+            document.getElementById('foodTitle').textContent = foodData.name;
+            document.getElementById('foodName').textContent = 'Easy ' + foodData.name;
+            document.getElementById('foodPrice').textContent = foodData.price;
+            document.getElementById('foodRating').textContent = foodData.rating;
+            document.getElementById('foodDescription').textContent = foodData.description;
+            document.getElementById('foodImage').src = foodData.image;
+            document.getElementById('foodImage').alt = foodData.name;
+        }
+
+        // Quantity and cart functionality
+        let quantity = 0;
+        let cartCount = 0;
+        
+        const quantityEl = document.getElementById('quantity');
+        const cartCountEl = document.getElementById('cartCount');
+        const incrementBtn = document.getElementById('incrementBtn');
+        const decrementBtn = document.getElementById('decrementBtn');
+        const cartBtn = document.getElementById('cartBtn');
+
+        incrementBtn.addEventListener('click', () => {
+            quantity++;
+            quantityEl.textContent = quantity;
+        });
+
+        decrementBtn.addEventListener('click', () => {
+            if (quantity > 0) {
+                quantity--;
+                quantityEl.textContent = quantity;
+            }
+        });
+
+        cartBtn.addEventListener('click', () => {
+            if (quantity > 0) {
+                cartCount += quantity;
+                cartCountEl.textContent = cartCount;
+                quantity = 0;
+                quantityEl.textContent = quantity;
+                
+                // Show feedback
+                cartBtn.classList.add('scale-110');
+                setTimeout(() => {
+                    cartBtn.classList.remove('scale-110');
+                }, 200);
+            }
+        });
+    </script>
+</body>
+</html>

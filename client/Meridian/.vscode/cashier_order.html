@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Meridian - Order Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Kapakana:wght@400;700&family=Lora:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Define color variables for easier use */
+        :root {
+            --color-gold: #FFD700;
+            --color-dark-gold: #B8860B;
+            --color-primary-green: #003323;
+            --color-secondary-green: #0d5a44;
+            --color-active-bg: #EBB62D; 
+            --color-text-dark: #333333;
+            --color-background: #F8F8F8; /* Light off-white background */
+        }
+
+        /* Utility Styles */
+        .text-dark-green { color: var(--color-primary-green); }
+        .bg-active-gold { background-color: var(--color-active-bg); }
+
+        /* Header Styling */
+        .order-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #E5E7EB; /* Light border for separation */
+        }
+        .header-title {
+            font-weight: 600;
+            font-size: 1.125rem;
+            color: var(--color-text-dark);
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        /* Order Meta Styling */
+        .meta-container {
+            padding: 1rem 0;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        .meta-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-text-dark);
+        }
+        .meta-info {
+            color: #6B7280; /* Gray-500 */
+            font-size: 0.875rem;
+        }
+        .note-button {
+            background-color: white;
+            border: 1px solid #D1D5DB; /* Gray-300 */
+            color: #6B7280;
+            padding: 0.375rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        /* Item Card Styling */
+        .item-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+        }
+        .item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .item-name {
+            font-weight: 600;
+            font-size: 1.125rem;
+            color: var(--color-text-dark);
+            line-height: 1.2;
+        }
+        .item-category {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+        .item-price {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-text-dark);
+        }
+        .item-quantity {
+            font-size: 0.75rem;
+            color: #9CA3AF; /* Gray-400 */
+            text-align: right;
+        }
+
+        /* Total Summary Styling */
+        .summary-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--color-secondary-green); 
+            color: white;
+            padding: 1.5rem 1rem;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+            max-width: 512px; /* Match the max-width of the main content */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .payment-button {
+            width: 100%;
+            background-color: var(--color-active-bg);
+            color: white;
+            padding: 1rem;
+            border-radius: 9999px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            transition: background-color 0.15s;
+            text-align: center; /* Ensures text is centered in the anchor tag */
+            display: block; /* Ensures anchor takes full width */
+        }
+        .payment-button:hover {
+            background-color: #DDAA1F; /* Slightly darker gold on hover */
+        }
+        
+        /* General Body */
+        body {
+            background-color: var(--color-background); 
+        }
+        .main-content {
+             padding-bottom: 200px; /* Space for the fixed summary box */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="max-w-lg mx-auto p-4">
+
+        <header class="order-header">
+            <a href="cashier_dashboard.html" class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-dark-green">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+            </a>
+            
+            <h1 class="header-title">Orders</h1>
+            <div class="w-6 h-6"></div> </header>
+        
+        <div class="main-content">
+            <div class="meta-container flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="meta-title">Table 121</h2>
+                    <div class="meta-info flex space-x-2">
+                        <span>Order 12 mins ago</span>
+                        <span>•</span>
+                        <span>Order #DD082804</span>
+                    </div>
+                </div>
+                <button class="note-button">
+                    Note
+                </button>
+            </div>
+
+            <div class="space-y-4 mb-8">
+                
+                <div class="item-card flex items-center space-x-4">
+                    <img src="https://via.placeholder.com/80x80?text=Salad" alt="Greek Salad" class="item-image">
+                    
+                    <div class="flex-grow">
+                        <p class="item-name">Greek Salad</p>
+                        <p class="item-category">Salad</p>
+                    </div>
+
+                    <div class="text-right">
+                        <p class="item-price">$21.99</p>
+                        <p class="item-quantity">Quantity: 2</p>
+                    </div>
+                </div>
+
+                <div class="item-card flex items-center space-x-4">
+                    <img src="https://via.placeholder.com/80x80?text=Cocktail" alt="Lemon Cocktail" class="item-image">
+                    
+                    <div class="flex-grow">
+                        <p class="item-name">Lemon Cocktail</p>
+                        <p class="item-category">Beverage</p>
+                    </div>
+
+                    <div class="text-right">
+                        <p class="item-price">$21.99</p>
+                        <p class="item-quantity">Quantity: 2</p>
+                    </div>
+                </div>
+                
+                </div>
+            
+        </div>
+        
+    </div>
+
+    <div class="summary-container">
+        <div class="space-y-1">
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span>$65.97</span>
+            </div>
+            <div class="summary-row">
+                <span>VAT</span>
+                <span>$10</span>
+            </div>
+            <div class="summary-row">
+                <span>Service fee</span>
+                <span>$20</span>
+            </div>
+        </div>
+
+        <div class="summary-total">
+            <span>Total</span>
+            <span>$95.97</span>
+        </div>
+
+        <a href="cashier_payment.html" class="payment-button">
+            Proceed to Payment
+        </a>
+    </div>
+
+</body>
+</html>

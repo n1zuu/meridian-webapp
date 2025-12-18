@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meridian - Customer Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Kapakana:wght@400;700&family=Lora:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+
+        /* Based on waiter_dashboard.html styles */
+        :root {
+            --meridian-dark-green: #3b5a44;
+            --meridian-gold: #FFD700;
+            --meridian-light-green: #5eb087; 
+        }
+
+        body {
+            background-color: #F4F4F6; 
+            font-family: Arial, sans-serif;
+            color: #1a1a1a; 
+        }
+
+        .meridian-script-small {
+            font-family: 'Kapakana', cursive; 
+            font-size: 1.5rem; 
+            background: linear-gradient(180deg, var(--meridian-gold) 0%, #B8860B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent; 
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            margin-bottom: 0.25rem;
+        }
+
+        .search-container {
+            background-color: #F4F4F6; 
+            padding: 1rem 1rem 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+        }
+
+        .search-input {
+            background-color: #FFFFFF; 
+            border: none; 
+            color: #1a1a1a;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            width: 100%;
+            box-shadow: none; 
+        }
+        .search-input::placeholder {
+            color: #999;
+        }
+
+        .shadow-custom {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+        }
+
+        .search-icon-svg {
+            color: var(--meridian-dark-green); 
+            display: block;
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        .logout-icon-svg { 
+            color: #1c1c1c;
+            display: block;
+            width: 1.5rem; 
+            height: 1.5rem;
+        }
+
+        .category-scroll-wrapper {
+            overflow-x: scroll;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            padding-bottom: 0.75rem; 
+            cursor: grab; 
+        }
+        .category-scroll-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+        .category-scroll-wrapper.active {
+            cursor: grabbing;
+        }
+
+        .category-pill {
+            background-color: #e5e5e5; 
+            color: #1a1a1a;
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            font-size: 0.9rem;
+            border: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .category-pill.active-category { 
+            background-color: var(--meridian-dark-green); 
+            color: #f7f7f7;
+            font-weight: 600;
+        }
+
+        .menu-card {
+            background-color: #FFFFFF; 
+            border-radius: 12px;
+            overflow: hidden;
+            padding: 0.75rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+            transition: transform 0.2s, opacity 0.3s;
+            cursor: pointer; /* Added cursor pointer */
+        }
+        .menu-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .menu-card.hidden {
+            display: none;
+        }
+
+        .card-image-wrapper {
+            width: 100%;
+            height: 150px;
+            overflow: hidden;
+            border-radius: 8px;
+            position: relative;
+            display: block; 
+            padding: 0; 
+        }
+        
+        .food-title {
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+        
+        .food-description {
+            color: #555;
+            font-size: 0.9rem;
+        }
+        
+        .food-price {
+            color: var(--meridian-dark-green); 
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+
+        #menu-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+            gap: 1rem;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* --- Food Detail Modal Styles (New) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: #fff;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px);
+            transition: transform 0.3s ease-out;
+        }
+        .modal-overlay.open .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+        }
+        
+        .modal-close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-section-title {
+            font-weight: 700;
+            font-size: 1.25rem; /* Matches image style */
+            color: var(--meridian-dark-green);
+            margin-bottom: 0.5rem;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 0.25rem;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="min-h-screen">
+
+        <header class="sticky top-0 z-10 search-container">
+            <div class="max-w-4xl mx-auto p-4">
+                
+                <div class="mb-4 flex justify-between items-center">
+                    <div>
+                        <h1 class="meridian-script-small">Meridian</h1>
+                        <p class="text-sm text-gray-600">Good morning. It is our pleasure to welcome you.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3 mb-6">
+                    
+                    <div class="relative flex-grow shadow-custom rounded-xl">
+                        <input type="text" id="search-input" placeholder="Search. ." class="search-input pl-10 h-12 rounded-xl">
+                        
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 search-icon-svg">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="search-icon-svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                            </svg>
+                        </span>
+                    </div>
+                    
+                    <a href="signin_as.html" class="flex-shrink-0 w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-custom" title="Log Out">
+                        <svg class="logout-icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H9" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="bg-[#F4F4F6] pb-3 shadow-sm">
+                <div class="max-w-4xl mx-auto px-4">
+                    <div class="category-scroll-wrapper flex space-x-3 whitespace-nowrap" id="category-bar">
+                        
+                        <button class="category-pill active-category flex-shrink-0" data-category="all">
+                            <span class="mr-2">🍱</span> All
+                        </button>
+
+                        <button class="category-pill flex-shrink-0" data-category="entrées">
+                            <span class="mr-2">🍜</span> Entrées
+                        </button>
+                        <button class="category-pill flex-shrink-0" data-category="soup">
+                            <span class="mr-2">🥣</span> Soup
+                        </button>
+                        <button class="category-pill flex-shrink-0" data-category="salad">
+                            <span class="mr-2">🥗</span> Salad
+                        </button>
+                        <button class="category-pill flex-shrink-0" data-category="main-courses">
+                            <span class="mr-2">🍖</span> Main Courses
+                        </button>
+                        <button class="category-pill flex-shrink-0" data-category="rotisserie">
+                            <span class="mr-2">🍗</span> Rotisserie
+                        </button>
+                        <button class="category-pill flex-shrink-0" data-category="accompaniments">
+                            <span class="mr-2">🥖</span> Accompaniments
+                        </button>
+                        <button class="category-pill flex-shrink-0" data-category="amuse-bouche">
+                            <span class="mr-2">✨</span> Amuse-Bouche
+                        </button>
+                        <button class="category-pill flex-shrink-0" data-category="dessert">
+                            <span class="mr-2">🍰</span> Dessert
+                        </button>
+                        <button class="category-pill flex-shrink-0" data-category="beverages">
+                            <span class="mr-2">🍹</span> Beverages
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+
+        <main class="max-w-4xl mx-auto p-4 pt-6">
+            <h2 class="text-xl font-semibold mb-4" id="current-category-title">All Menu Items</h2>
+
+            <div id="menu-list" class="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+
+                <div class="menu-card" data-food-id="greek-salad" data-category="salad" 
+                     data-name="Easy Greek Salad" data-price="21.99" 
+                     data-description="A refreshing Mediterranean classic featuring crisp lettuce, juicy tomatoes, cucumbers, red onion, olives, and authentic feta cheese, dressed with a light olive oil and oregano vinaigrette.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/5eb087?text=Easy+Greek+Salad" 
+                            alt="Easy Greek Salad" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Easy Greek Salad</p>
+                        <p class="food-description text-xs truncate">Salad</p>
+                        <p class="food-price mt-1">$21.99</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="chicken-salad" data-category="salad"
+                     data-name="Grilled Chicken Salad" data-price="25.50"
+                     data-description="Tender grilled chicken breast served over a bed of mixed greens, topped with sweet corn, cherry tomatoes, avocado slices, and a creamy ranch dressing. A filling and healthy choice.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/457c4f?text=Grilled+Chicken+Salad" 
+                            alt="Grilled Chicken Salad" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Grilled Chicken Salad</p>
+                        <p class="food-description text-xs truncate">Salad</p>
+                        <p class="food-price mt-1">$25.50</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="caesar-salad" data-category="salad"
+                     data-name="Caesar Salad Classic" data-price="19.00"
+                     data-description="The timeless Caesar salad: crisp romaine, house-made croutons, fresh Parmesan shavings, and our signature creamy Caesar dressing. Add chicken for an additional fee.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/9a8c79?text=Caesar+Salad" 
+                            alt="Caesar Salad Classic" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Caesar Salad Classic</p>
+                        <p class="food-description text-xs truncate">Salad</p>
+                        <p class="food-price mt-1">$19.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="quinoa-arugula" data-category="salad"
+                     data-name="Quinoa and Arugula Salad" data-price="23.00"
+                     data-description="A hearty mix of fluffy quinoa, peppery arugula, toasted almonds, dried cranberries, and goat cheese, finished with a bright lemon-tahini dressing.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/789a69?text=Quinoa+Arugula+Salad" 
+                            alt="Quinoa and Arugula Salad" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Quinoa and Arugula Salad</p>
+                        <p class="food-description text-xs truncate">Salad</p>
+                        <p class="food-price mt-1">$23.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="caprese-skewers" data-category="salad"
+                     data-name="Caprese Salad Skewers" data-price="18.50"
+                     data-description="Cherry tomatoes, fresh mozzarella balls, and basil leaves skewered and drizzled with balsamic glaze and extra virgin olive oil. A perfect starter.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/a83a3a?text=Caprese+Skewers" 
+                            alt="Caprese Salad Skewers" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Caprese Salad Skewers</p>
+                        <p class="food-description text-xs truncate">Salad</p>
+                        <p class="food-price mt-1">$18.50</p>
+                    </div>
+                </div>
+
+                <div class="menu-card" data-food-id="espresso-martini" data-category="beverages"
+                     data-name="Espresso Martini" data-price="14.00"
+                     data-description="A sophisticated blend of vodka, coffee liqueur, and freshly brewed espresso, shaken vigorously for a velvety crema finish.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/1c1c1c?text=Espresso+Martini" 
+                            alt="Espresso Martini" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Espresso Martini</p>
+                        <p class="food-description text-xs truncate">Beverages</p>
+                        <p class="food-price mt-1">$14.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="orange-juice" data-category="beverages"
+                     data-name="Fresh Orange Juice" data-price="8.00"
+                     data-description="Daily squeezed from the freshest oranges. Sweet, tangy, and invigorating. Served chilled.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/FFD700?text=Orange+Juice" 
+                            alt="Freshly Squeezed Orange Juice" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Fresh Orange Juice</p>
+                        <p class="food-description text-xs truncate">Beverages</p>
+                        <p class="food-price mt-1">$8.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="meridian-signature" data-category="beverages"
+                     data-name="Meridian Signature" data-price="16.50"
+                     data-description="Our house special cocktail: a refreshing blend of premium gin, elderflower liqueur, mint, and a splash of cucumber.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/509b50?text=Meridian+Signature" 
+                            alt="Meridian Signature Cocktail" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Meridian Signature</p>
+                        <p class="food-description text-xs truncate">Beverages</p>
+                        <p class="food-price mt-1">$16.50</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="sparkling-water" data-category="beverages"
+                     data-name="Sparkling Water" data-price="6.00"
+                     data-description="Premium sparkling mineral water, served with a wedge of lemon or lime upon request.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/aed9e0?text=Sparkling+Water" 
+                            alt="Sparkling Water with Mint" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Sparkling Water</p>
+                        <p class="food-description text-xs truncate">Beverages</p>
+                        <p class="food-price mt-1">$6.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="pinot-noir" data-category="beverages"
+                     data-name="Pinot Noir (Glass)" data-price="18.00"
+                     data-description="A selection of smooth, medium-bodied Pinot Noir with notes of cherry and earth. Ask your server for today's vintage.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/9e3a3a?text=Pinot+Noir" 
+                            alt="Pinot Noir Selection" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Pinot Noir (Glass)</p>
+                        <p class="food-description text-xs truncate">Beverages</p>
+                        <p class="food-price mt-1">$18.00</p>
+                    </div>
+                </div>
+                
+                <div class="menu-card" data-food-id="beef-tenderloin" data-category="main-courses"
+                     data-name="Beef Tenderloin" data-price="45.99"
+                     data-description="Eight-ounce premium cut of beef tenderloin, grilled to perfection, served with seasonal roasted vegetables and a rich red wine reduction.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/4a2c2c?text=Beef+Tenderloin" 
+                            alt="Beef Tenderloin" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Beef Tenderloin</p>
+                        <p class="food-description text-xs truncate">Main Course</p>
+                        <p class="food-price mt-1">$45.99</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="pan-seared-scallops" data-category="main-courses"
+                     data-name="Pan-Seared Scallops" data-price="39.50"
+                     data-description="Jumbo sea scallops pan-seared in butter until caramelized, served atop a bed of creamy saffron risotto and microgreens.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/e0e0e0?text=Pan-Seared+Scallops" 
+                            alt="Pan-Seared Scallops" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Pan-Seared Scallops</p>
+                        <p class="food-description text-xs truncate">Main Course</p>
+                        <p class="food-price mt-1">$39.50</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="vegetarian-lasagna" data-category="main-courses"
+                     data-name="Vegetarian Lasagna" data-price="28.00"
+                     data-description="Layers of fresh pasta, creamy ricotta cheese, spinach, zucchini, and marinara sauce, baked until golden brown.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/8a3a3a?text=Vegetarian+Lasagna" 
+                            alt="Vegetarian Lasagna" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Vegetarian Lasagna</p>
+                        <p class="food-description text-xs truncate">Main Course</p>
+                        <p class="food-price mt-1">$28.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="lobster-risotto" data-category="main-courses"
+                     data-name="Lobster Risotto" data-price="55.00"
+                     data-description="Creamy Arborio rice slow-cooked in a lobster reduction and finished with chunks of fresh Maine lobster meat and Parmesan cheese.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/d48b52?text=Lobster+Risotto" 
+                            alt="Lobster Risotto" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Lobster Risotto</p>
+                        <p class="food-description text-xs truncate">Main Course</p>
+                        <p class="food-price mt-1">$55.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="pork-chop" data-category="main-courses"
+                     data-name="Pork Chop" data-price="35.99"
+                     data-description="Thick-cut, bone-in pork chop, brined and grilled, served with a spiced apple chutney and sweet potato puree.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/6b4e3e?text=Pork+Chop" 
+                            alt="Pork Chop with Apple Chutney" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Pork Chop</p>
+                        <p class="food-description text-xs truncate">Main Course</p>
+                        <p class="food-price mt-1">$35.99</p>
+                    </div>
+                </div>
+
+                <div class="menu-card" data-food-id="shrimp-cocktail" data-category="entrées"
+                     data-name="Jumbo Shrimp Cocktail" data-price="24.00"
+                     data-description="Five large, perfectly poached shrimp served over ice with our tangy house-made cocktail sauce and a lemon wedge.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/e0c4a3?text=Shrimp+Cocktail" 
+                            alt="Shrimp Cocktail" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Jumbo Shrimp Cocktail</p>
+                        <p class="food-description text-xs truncate">Entrée</p>
+                        <p class="food-price mt-1">$24.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="foie-gras" data-category="entrées"
+                     data-name="Foie Gras Terrine" data-price="32.00"
+                     data-description="Smooth, rich terrine of duck liver served with a toasted brioche and a fig jam reduction.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/b09e8f?text=Foie+Gras" 
+                            alt="Foie Gras Terrine" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Foie Gras Terrine</p>
+                        <p class="food-description text-xs truncate">Entrée</p>
+                        <p class="food-price mt-1">$32.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="oysters-rockefeller" data-category="entrées"
+                     data-name="Oysters Rockefeller" data-price="29.00"
+                     data-description="Baked oysters topped with a rich sauce of butter, herbs, and bread crumbs, typically including spinach and other green seasonings.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/788c69?text=Oysters+Rockefeller" 
+                            alt="Oysters Rockefeller" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Oysters Rockefeller</p>
+                        <p class="food-description text-xs truncate">Entrée</p>
+                        <p class="food-price mt-1">$29.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="tuna-tartare" data-category="entrées"
+                     data-name="Spicy Tuna Tartare" data-price="26.50"
+                     data-description="Fresh, diced Ahi tuna mixed with a spicy sesame dressing, served with avocado and crispy wonton chips.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/d24c4c?text=Tuna+Tartare" 
+                            alt="Tuna Tartare" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Spicy Tuna Tartare</p>
+                        <p class="food-description text-xs truncate">Entrée</p>
+                        <p class="food-price mt-1">$26.50</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="prosciutto-melon" data-category="entrées"
+                     data-name="Prosciutto Melon" data-price="19.50"
+                     data-description="Thinly sliced imported prosciutto wrapped around sweet, ripe cantaloupe wedges. A classic Italian starter.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/f0d099?text=Prosciutto+Melon" 
+                            alt="Prosciutto Wrapped Melon" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Prosciutto Melon</p>
+                        <p class="food-description text-xs truncate">Entrée</p>
+                        <p class="food-price mt-1">$19.50</p>
+                    </div>
+                </div>
+
+                <div class="menu-card" data-food-id="truffle-mashed" data-category="accompaniments"
+                     data-name="Truffle Mashed Potatoes" data-price="12.00"
+                     data-description="Creamy whipped potatoes infused with white truffle oil and topped with chives.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/c0c0c0?text=Mashed+Potatoes" 
+                            alt="Truffle Mashed Potatoes" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Truffle Mashed Potatoes</p>
+                        <p class="food-description text-xs truncate">Accompaniments</p>
+                        <p class="food-price mt-1">$12.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="grilled-asparagus" data-category="accompaniments"
+                     data-name="Grilled Asparagus" data-price="10.00"
+                     data-description="Fresh asparagus spears lightly grilled with olive oil, sea salt, and a squeeze of lemon.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/509b50?text=Grilled+Asparagus" 
+                            alt="Asparagus with Hollandaise" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Grilled Asparagus</p>
+                        <p class="food-description text-xs truncate">Accompaniments</p>
+                        <p class="food-price mt-1">$10.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="creamed-spinach" data-category="accompaniments"
+                     data-name="Classic Creamed Spinach" data-price="9.50"
+                     data-description="Tender spinach leaves folded into a rich, savory cream sauce, seasoned perfectly.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/3b5a44?text=Creamed+Spinach" 
+                            alt="Creamed Spinach" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Classic Creamed Spinach</p>
+                        <p class="food-description text-xs truncate">Accompaniments</p>
+                        <p class="food-price mt-1">$9.50</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="pommes-frites" data-category="accompaniments"
+                     data-name="Crispy Pommes Frites" data-price="8.00"
+                     data-description="Thinly cut, double-fried French fries, served hot and crispy with a side of aioli.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/FFD700?text=Pommes+Frites" 
+                            alt="Pommes Frites" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Crispy Pommes Frites</p>
+                        <p class="food-description text-xs truncate">Accompaniments</p>
+                        <p class="food-price mt-1">$8.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="wild-mushrooms" data-category="accompaniments"
+                     data-name="Wild Mushroom Sauté" data-price="11.50"
+                     data-description="A medley of seasonal wild mushrooms, pan-sautéed in garlic butter and herbs.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/705a4e?text=Wild+Mushrooms" 
+                            alt="Sautéed Wild Mushrooms" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Wild Mushroom Sauté</p>
+                        <p class="food-description text-xs truncate">Accompaniments</p>
+                        <p class="food-price mt-1">$11.50</p>
+                    </div>
+                </div>
+
+                <div class="menu-card" data-food-id="lentil-soup" data-category="soup"
+                     data-name="Creamy Lentil Soup" data-price="12.00"
+                     data-description="A comforting, puréed lentil soup finished with a touch of cream and a drizzle of olive oil.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/e0b087?text=Creamy+Lentil+Soup" 
+                            alt="Creamy Lentil Soup" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Creamy Lentil Soup</p>
+                        <p class="food-description text-xs truncate">Soup</p>
+                        <p class="food-price mt-1">$12.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="french-onion-soup" data-category="soup"
+                     data-name="French Onion Soup" data-price="15.00"
+                     data-description="Caramelized onions in a rich beef broth, topped with a large crouton and melted Gruyère cheese, baked until bubbly.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/d2a37e?text=French+Onion+Soup" 
+                            alt="French Onion Soup" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">French Onion Soup</p>
+                        <p class="food-description text-xs truncate">Soup</p>
+                        <p class="food-price mt-1">$15.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="lobster-bisque" data-category="soup"
+                     data-name="Rich Lobster Bisque" data-price="18.00"
+                     data-description="A classic, creamy soup made from a savory stock of lobster, finished with a touch of sherry and cream.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/b05e5e?text=Lobster+Bisque" 
+                            alt="Lobster Bisque" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Rich Lobster Bisque</p>
+                        <p class="food-description text-xs truncate">Soup</p>
+                        <p class="food-price mt-1">$18.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="tomato-basil-soup" data-category="soup"
+                     data-name="Tomato Basil Soup" data-price="11.00"
+                     data-description="Smooth, vibrant tomato soup infused with fresh basil, served with a garnish of Parmesan.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/a83a3a?text=Tomato+Basil+Soup" 
+                            alt="Tomato Basil Soup" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Tomato Basil Soup</p>
+                        <p class="food-description text-xs truncate">Soup</p>
+                        <p class="food-price mt-1">$11.00</p>
+                    </div>
+                </div>
+                <div class="menu-card" data-food-id="mushrooom-velouté" data-category="soup"
+                     data-name="Mushroom Velouté" data-price="14.50"
+                     data-description="A velvety, sophisticated mushroom soup thickened with a roux and finished with cream.">
+                    <div class="card-image-wrapper">
+                        <img 
+                            src="https://via.placeholder.com/150/8b8377?text=Mushroom+Velouté" 
+                            alt="Mushroom Velouté" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <div class="mt-3">
+                        <p class="food-title text-base truncate">Mushroom Velouté</p>
+                        <p class="food-description text-xs truncate">Soup</p>
+                        <p class="food-price mt-1">$14.50</p>
+                    </div>
+                </div>
+                
+            </div>
+        </main>
+    </div>
+    
+    <div id="food-detail-modal" class="modal-overlay">
+        <div class="modal-content">
+            
+            <div class="modal-close-button" id="modal-close-button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="#333" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </div>
+
+            <img id="modal-image" src="" alt="Food Image" class="modal-image">
+
+            <div class="p-5">
+                <h2 id="modal-food-name" class="text-3xl font-bold text-gray-800 mb-3">Food Name</h2>
+                
+                <div class="mb-4">
+                    <p class="text-gray-500 text-lg">Price</p>
+                    <p id="modal-food-price" class="text-3xl font-bold text-red-600">$X.XX</p>
+                </div>
+                
+                <h3 class="modal-section-title text-xl font-semibold mt-4">Description</h3>
+                <p id="modal-food-description" class="text-gray-700 text-base leading-relaxed"></p>
+
+                </div>
+        </div>
+    </div>
+
+    <script>
+        
+        // --- 1. Element Selectors ---
+        const categoryButtons = document.querySelectorAll('.category-pill');
+        const menuCards = document.querySelectorAll('.menu-card');
+        const searchInput = document.getElementById('search-input');
+        const currentCategoryTitle = document.getElementById('current-category-title');
+        
+        // Modal elements
+        const modal = document.getElementById('food-detail-modal');
+        const modalCloseButton = document.getElementById('modal-close-button');
+        const modalImage = document.getElementById('modal-image');
+        const modalFoodName = document.getElementById('modal-food-name');
+        const modalFoodPrice = document.getElementById('modal-food-price');
+        const modalFoodDescription = document.getElementById('modal-food-description');
+
+        // --- 2. Filter & Search Logic ---
+
+        function filterMenu() {
+            const activeCategory = document.querySelector('.category-pill.active-category').getAttribute('data-category');
+            const searchText = searchInput.value.toLowerCase().trim();
+            
+            // Update the category title
+            const categoryName = activeCategory.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+            currentCategoryTitle.textContent = activeCategory === 'all' ? 'All Menu Items' : categoryName;
+
+            menuCards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category').toLowerCase();
+                const cardName = card.getAttribute('data-name').toLowerCase();
+                
+                const matchesCategory = activeCategory === 'all' || cardCategory.includes(activeCategory);
+                const matchesSearch = cardName.includes(searchText);
+
+                if (matchesCategory && matchesSearch) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // --- 3. Modal Functions ---
+
+        function openFoodDetailModal(card) {
+            const name = card.getAttribute('data-name');
+            const price = card.getAttribute('data-price');
+            const description = card.getAttribute('data-description');
+            const imageUrl = card.querySelector('.card-image-wrapper img').src;
+
+            // Populate Modal Content
+            modalFoodName.textContent = name;
+            modalFoodPrice.textContent = `$${parseFloat(price).toFixed(2)}`;
+            modalFoodDescription.textContent = description;
+            modalImage.src = imageUrl;
+
+            // Display Modal
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeFoodDetailModal() {
+            modal.classList.remove('open');
+            document.body.style.overflow = ''; // Restore background scrolling
+        }
+
+        // --- 4. Event Listeners ---
+
+        // Category filtering (when a pill is clicked)
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Update active state
+                categoryButtons.forEach(btn => btn.classList.remove('active-category'));
+                this.classList.add('active-category');
+
+                filterMenu();
+            });
+        });
+
+        // Search input (when user types)
+        searchInput.addEventListener('keyup', filterMenu);
+        searchInput.addEventListener('change', filterMenu);
+        
+        // Food Card Click Listener (Open Modal)
+        menuCards.forEach(card => {
+            card.addEventListener('click', () => {
+                openFoodDetailModal(card);
+            });
+        });
+
+        // Close modal listeners
+        modalCloseButton.addEventListener('click', closeFoodDetailModal);
+        
+        // Close modal if clicking outside the content (on the backdrop)
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeFoodDetailModal();
+            }
+        });
+
+        // Initialize filtering on page load
+        document.addEventListener('DOMContentLoaded', filterMenu);
+
+        // --- 5. Horizontal Scroll Dragging (for the category bar) ---
+        const slider = document.getElementById('category-bar');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.classList.add('active');
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+
+        slider.addEventListener('mouseleave', () => {
+            isDown = false;
+            slider.classList.remove('active');
+        });
+
+        slider.addEventListener('mouseup', () => {
+            isDown = false;
+            slider.classList.remove('active');
+        });
+
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 1.5; 
+            slider.scrollLeft = scrollLeft - walk;
+        });
+        
+    </script>
+</body>
+</html>

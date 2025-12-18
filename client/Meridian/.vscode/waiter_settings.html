@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meridian - Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Kapakana:wght@400;700&family=Lora:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+
+        :root {
+            /* Using the colors defined in waiter_dashboard.html for consistency */
+            --meridian-dark-green: #3b5a44;
+            --meridian-gold: #FFD700;
+        }
+
+        body {
+            background-color: #F4F4F6; 
+            font-family: Arial, sans-serif;
+            color: #1a1a1a; 
+        }
+
+        /* Custom shadow for the setting cards */
+        .card-shadow {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Lighter shadow for the cards */
+        }
+        
+        /* Styles for the Log Out Confirmation Modal */
+        #logout-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent overlay */
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: #FFFFFF;
+            border-radius: 18px; /* Rounded corners to match the screenshot */
+            width: 90%;
+            max-width: 320px;
+            padding: 1.5rem 1.25rem 1rem;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transform: scale(1);
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .modal-message {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        
+        /* Primary button style to match the Log Out button in the screenshot */
+        .modal-button-primary {
+            flex-grow: 1;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            background-color: #fce7e7; /* Light red/pinkish background */
+            color: #dc2626; /* Red text for Log Out */
+            border: none;
+        }
+
+        /* Secondary button style to match the Cancel button in the screenshot */
+        .modal-button-secondary {
+            flex-grow: 1;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            background-color: #e5e5e5; /* Light gray background */
+            color: #1a1a1a;
+            border: none;
+        }
+        
+        /* The custom button group to match the iOS-style rounded-box look of the screenshot */
+        .modal-button-group {
+            display: flex;
+            flex-direction: row; /* Horizontal layout for the two buttons */
+            background-color: #FFFFFF;
+            border-radius: 12px; 
+            padding: 8px; /* Padding inside the button group container */
+            width: 100%;
+            margin-top: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for the group */
+        }
+        
+        .modal-action-button {
+            flex: 1; /* Equal width for both buttons */
+            padding: 12px 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.1s;
+        }
+        
+        .modal-action-button.cancel {
+            background-color: #f0f0f0; /* Slightly different background for cancel */
+            color: #1a1a1a;
+        }
+        
+        .modal-action-button.logout {
+            background-color: #ffcccc; /* Light red background */
+            color: #dc2626; /* Red text */
+        }
+        
+        /* Container for the actual modal that holds the button group to center it */
+        .modal-inner-container {
+            width: 90%;
+            max-width: 300px; /* Adjust max width to match screenshot appearance */
+            background-color: #FFFFFF;
+            border-radius: 15px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        /* The actual button group from the screenshot */
+        .modal-button-stack {
+            display: flex;
+            flex-direction: row;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1rem;
+            background-color: #e5e5e5; /* Background color for the separator effect */
+            height: 44px; /* Fixed height to match typical iOS button */
+        }
+        
+        .modal-button-stack button {
+            flex: 1;
+            height: 100%;
+            border: none;
+            font-size: 16px;
+            font-weight: 400; /* Regular weight for Cancel */
+            background-color: #FFFFFF;
+            cursor: pointer;
+        }
+        
+        .modal-button-stack .cancel-button {
+            border-right: 0.5px solid #dcdcdc; /* Subtle separator */
+            color: #1a1a1a;
+        }
+        
+        .modal-button-stack .logout-button {
+            color: #dc2626; /* Red text for Log Out */
+            font-weight: 600; /* Bold weight for Log Out */
+        }
+        
+        /* The translucent overlay for the modal to blur the background slightly (iOS style) */
+        .modal-overlay-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px); /* This mimics the slight blur effect */
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        
+
+    </style>
+</head>
+<body>
+
+    <div class="min-h-screen max-w-lg mx-auto bg-white">
+
+        <header class="p-4 flex items-center justify-between sticky top-0 bg-white z-10 border-b border-gray-100">
+            <button id="close-settings" class="text-gray-500 hover:text-gray-800">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <h1 class="text-lg font-semibold text-center flex-grow">Settings</h1>
+            <div class="w-6 h-6"></div> </header>
+
+        <main class="p-4 pt-0">
+            
+            <div class="mb-6">
+                 <div class="relative flex-grow rounded-xl bg-[#e5e5e5] p-2 flex items-center">
+                    <span class="text-gray-500 mr-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                        </svg>
+                    </span>
+                    <input type="text" placeholder="Search. ." class="bg-transparent border-none outline-none w-full text-sm placeholder-gray-500" />
+                </div>
+            </div>
+
+            <h2 class="text-sm font-semibold mb-2 text-gray-700">Personal Information</h2>
+            <div class="bg-white rounded-xl card-shadow overflow-hidden mb-6 border border-gray-100">
+                <div class="p-4 flex justify-between items-center border-b border-gray-100">
+                    <span class="text-sm text-gray-700">Employee Name</span>
+                    <span class="text-sm font-medium">Anarica Mabangkit</span>
+                </div>
+                <div class="p-4 flex justify-between items-center border-b border-gray-100">
+                    <span class="text-sm text-gray-700">Employee ID</span>
+                    <span class="text-sm font-medium text-gray-600">M-0068</span>
+                </div>
+                <div class="p-4 flex justify-between items-center border-b border-gray-100">
+                    <span class="text-sm text-gray-700">Email</span>
+                    <span class="text-sm font-medium text-gray-600">a*******@example.com</span>
+                </div>
+                <div class="p-4 flex justify-between items-center">
+                    <span class="text-sm text-gray-700">Phone Number</span>
+                    <span class="text-sm font-medium text-gray-600">+1-2*********76</span>
+                </div>
+            </div>
+
+            <h2 class="text-sm font-semibold mb-2 text-gray-700">Account Settings</h2>
+            <div class="bg-white rounded-xl card-shadow overflow-hidden mb-6 border border-gray-100">
+                <button class="w-full p-4 flex justify-between items-center border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                    <span class="text-sm">Change password</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-gray-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+                <button class="w-full p-4 flex justify-between items-center border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                    <span class="text-sm">Push notifications settings</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-gray-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+                <button class="w-full p-4 flex justify-between items-center border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                    <span class="text-sm">Email notifications preferences</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-gray-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+                <button class="w-full p-4 flex justify-between items-center hover:bg-gray-50 transition-colors">
+                    <span class="text-sm">Two-factor authentication</span>
+                    <div class="flex items-center">
+                        <span class="text-sm text-gray-400 mr-2">Disabled</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-gray-400">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </div>
+                </button>
+            </div>
+
+            <button id="log-out-button" class="w-full bg-white rounded-xl card-shadow p-4 flex items-center hover:bg-gray-50 transition-colors border border-gray-100">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-red-600 mr-3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                </svg>
+                <span class="text-sm font-semibold text-red-600">Log Out</span>
+            </button>
+
+        </main>
+    </div>
+    
+    <div id="logout-modal" class="modal-overlay-bg">
+        <div class="modal-inner-container">
+            <h2 class="modal-title">Log Out</h2>
+            <p class="modal-message">Are you sure you want to logout?</p>
+            
+            <div class="modal-button-stack">
+                <button class="cancel-button" id="modal-cancel">Cancel</button>
+                <button class="logout-button" id="modal-logout-confirm">Log Out</button>
+            </div>
+            
+        </div>
+    </div>
+
+
+    <script>
+        const logOutButton = document.getElementById('log-out-button');
+        const modal = document.getElementById('logout-modal');
+        const modalCancelButton = document.getElementById('modal-cancel');
+        const modalConfirmButton = document.getElementById('modal-logout-confirm');
+        const closeSettingsButton = document.getElementById('close-settings');
+
+        // Function to show the modal
+        function showModal() {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        // Function to hide the modal
+        function hideModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Re-enable background scrolling
+        }
+
+        // Event listener to open the modal
+        logOutButton.addEventListener('click', showModal);
+
+        // Event listener to close the modal (Cancel button)
+        modalCancelButton.addEventListener('click', hideModal);
+
+        // LOG OUT FUNCTIONALITY: Redirect to signin.html
+        modalConfirmButton.addEventListener('click', () => {
+            window.location.href = 'signin.html';
+        });
+        
+        // CLOSE ICON FUNCTIONALITY: Redirect to waiter_dashboard.html
+        closeSettingsButton.addEventListener('click', () => {
+            window.location.href = 'waiter_dashboard.html'; 
+        });
+
+    </script>
+</body>
+</html>

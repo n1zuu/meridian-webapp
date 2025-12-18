@@ -13,6 +13,7 @@
         :root {
             --meridian-dark-green: #3b5a44;
             --meridian-gold: #FFD700;
+            --meridian-light-green: #5eb087; /* For the salad background */
         }
 
         body {
@@ -114,6 +115,7 @@
             padding: 0.75rem;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
             transition: transform 0.2s, opacity 0.3s;
+            cursor: pointer; /* Added cursor pointer */
         }
         .menu-card:hover {
             transform: translateY(-2px);
@@ -157,6 +159,223 @@
             gap: 1rem;
             transition: opacity 0.3s ease-in-out;
         }
+
+        /* --- Floating Cart Button Styles --- */
+        .floating-cart-button {
+            position: fixed;
+            bottom: 24px; 
+            right: 24px;  
+            width: 64px;
+            height: 64px;
+            background-color: #FFFFFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Outer drop shadow and inner shadow effect */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), inset 0 2px 5px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+            z-index: 50; 
+        }
+
+        .floating-cart-button:active {
+            transform: scale(0.95);
+        }
+
+        .cart-icon {
+            color: var(--meridian-gold); /* Use the gold color for the icon */
+            width: 32px; /* Large icon size */
+            height: 32px;
+            stroke-width: 2; /* Adjust stroke for icon thickness */
+        }
+        /* ------------------------------------- */
+
+        /* --- Food Detail Modal Styles (New) --- */
+        #food-detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        #food-detail-content {
+            position: relative;
+            background: #FFFFFF;
+            width: 100%;
+            height: 100%;
+            max-width: 600px; /* Optional: Constrain the width on large screens */
+            /* The image provided appears full screen on a mobile width */
+            overflow-y: auto;
+        }
+
+        /* Styles to mimic the "Easy Greek Salad" screen */
+        .food-detail-header-section {
+            background-color: var(--meridian-light-green); /* Teal/Green color from the image */
+            padding: 1rem 0;
+        }
+        
+        .food-detail-title {
+            color: var(--meridian-gold);
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .food-detail-main-info {
+            background-color: var(--meridian-light-green);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 2rem;
+            position: relative;
+        }
+
+        .food-detail-image-container {
+            width: 100%;
+            max-width: 300px; /* Adjust size of the centered image */
+            height: 300px;
+            position: relative;
+            margin-top: -1rem; /* Adjust to move the image up */
+        }
+        
+        .food-detail-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .food-detail-text-section {
+            background-color: var(--meridian-dark-green); /* Darker green section */
+            color: #f7f7f7;
+            padding: 2rem 1rem 120px 1rem; /* Extra padding for floating buttons */
+            min-height: 50vh;
+        }
+
+        .food-detail-name {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .food-detail-description {
+            font-size: 1rem;
+            color: #c7d2d2;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+
+        .food-detail-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .food-detail-back-button {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            color: #FFFFFF;
+            padding: 0.5rem;
+            z-index: 101;
+            cursor: pointer;
+        }
+        
+        /* Floating Action Buttons */
+        .food-detail-floating-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 600px; /* Should match the modal max-width */
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 1rem;
+            background: linear-gradient(to top, rgba(59, 90, 68, 1) 50%, rgba(59, 90, 68, 0.5) 100%);
+            /* Using the dark green from the text section */
+            z-index: 100;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            background-color: var(--meridian-gold);
+            border-radius: 9999px;
+            padding: 0.25rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+        }
+
+        .qty-button {
+            width: 44px;
+            height: 44px;
+            background-color: transparent;
+            color: var(--meridian-dark-green);
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.1s;
+        }
+        .qty-button:active {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .qty-display {
+            color: var(--meridian-dark-green);
+            font-size: 1.25rem;
+            font-weight: 600;
+            padding: 0 0.5rem;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .add-to-cart-button {
+            width: 48px;
+            height: 48px;
+            background-color: #FFFFFF;
+            border-radius: 50%;
+            margin-left: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .add-to-cart-icon {
+            color: var(--meridian-dark-green);
+            width: 24px;
+            height: 24px;
+        }
+        
+        /* Styles for the small cart bubble from the food detail page */
+        .small-cart-bubble {
+            width: 48px;
+            height: 48px;
+            background-color: #FFFFFF;
+            border-radius: 50%;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: absolute; /* Positioned relative to main-info section for the screenshot look */
+            bottom: -24px;
+            right: 1.5rem; 
+        }
+
     </style>
 </head>
 <body>
@@ -185,11 +404,11 @@
                         </span>
                     </div>
                     
-                    <button class="flex-shrink-0 w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-custom">
+                    <a href="waiter_settings.html" class="flex-shrink-0 w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-custom">
                         <svg class="settings-icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
                         </svg>
-                    </button>
+                    </a>
                 </div>
             </div>
             
@@ -239,10 +458,10 @@
 
             <div id="menu-list" class="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 
-                <div class="menu-card" data-category="salad">
+                <div class="menu-card" data-food-id="greek-salad" data-category="salad">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/5eb087?text=Easy+Greek+Salad" 
                             alt="Easy Greek Salad" 
                             class="w-full h-full object-cover"
                         >
@@ -253,10 +472,10 @@
                         <p class="food-price mt-1">$21.99</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="salad">
+                <div class="menu-card" data-food-id="chicken-salad" data-category="salad">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/457c4f?text=Grilled+Chicken+Salad" 
                             alt="Grilled Chicken Salad" 
                             class="w-full h-full object-cover"
                         >
@@ -267,10 +486,10 @@
                         <p class="food-price mt-1">$25.50</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="salad">
+                <div class="menu-card" data-food-id="caesar-salad" data-category="salad">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/9a8c79?text=Caesar+Salad" 
                             alt="Caesar Salad Classic" 
                             class="w-full h-full object-cover"
                         >
@@ -281,10 +500,10 @@
                         <p class="food-price mt-1">$19.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="salad">
+                <div class="menu-card" data-food-id="quinoa-arugula" data-category="salad">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/789a69?text=Quinoa+Arugula+Salad" 
                             alt="Quinoa and Arugula Salad" 
                             class="w-full h-full object-cover"
                         >
@@ -295,10 +514,10 @@
                         <p class="food-price mt-1">$23.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="salad">
+                <div class="menu-card" data-food-id="caprese-skewers" data-category="salad">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/a83a3a?text=Caprese+Skewers" 
                             alt="Caprese Salad Skewers" 
                             class="w-full h-full object-cover"
                         >
@@ -310,10 +529,10 @@
                     </div>
                 </div>
 
-                <div class="menu-card" data-category="beverages">
+                <div class="menu-card" data-food-id="espresso-martini" data-category="beverages">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/1c1c1c?text=Espresso+Martini" 
                             alt="Espresso Martini" 
                             class="w-full h-full object-cover"
                         >
@@ -324,10 +543,10 @@
                         <p class="food-price mt-1">$14.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="beverages">
+                <div class="menu-card" data-food-id="orange-juice" data-category="beverages">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/FFD700?text=Orange+Juice" 
                             alt="Freshly Squeezed Orange Juice" 
                             class="w-full h-full object-cover"
                         >
@@ -338,10 +557,10 @@
                         <p class="food-price mt-1">$8.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="beverages">
+                <div class="menu-card" data-food-id="meridian-signature" data-category="beverages">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/509b50?text=Meridian+Signature" 
                             alt="Meridian Signature Cocktail" 
                             class="w-full h-full object-cover"
                         >
@@ -352,10 +571,10 @@
                         <p class="food-price mt-1">$16.50</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="beverages">
+                <div class="menu-card" data-food-id="sparkling-water" data-category="beverages">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/aed9e0?text=Sparkling+Water" 
                             alt="Sparkling Water with Mint" 
                             class="w-full h-full object-cover"
                         >
@@ -366,10 +585,10 @@
                         <p class="food-price mt-1">$6.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="beverages">
+                <div class="menu-card" data-food-id="pinot-noir" data-category="beverages">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/9e3a3a?text=Pinot+Noir" 
                             alt="Pinot Noir Selection" 
                             class="w-full h-full object-cover"
                         >
@@ -381,10 +600,10 @@
                     </div>
                 </div>
                 
-                <div class="menu-card" data-category="main-courses">
+                <div class="menu-card" data-food-id="beef-tenderloin" data-category="main-courses">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/4a2c2c?text=Beef+Tenderloin" 
                             alt="Beef Tenderloin" 
                             class="w-full h-full object-cover"
                         >
@@ -395,10 +614,10 @@
                         <p class="food-price mt-1">$45.99</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="main-courses">
+                <div class="menu-card" data-food-id="pan-seared-scallops" data-category="main-courses">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/e0e0e0?text=Pan-Seared+Scallops" 
                             alt="Pan-Seared Scallops" 
                             class="w-full h-full object-cover"
                         >
@@ -409,10 +628,10 @@
                         <p class="food-price mt-1">$39.50</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="main-courses">
+                <div class="menu-card" data-food-id="vegetarian-lasagna" data-category="main-courses">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/8a3a3a?text=Vegetarian+Lasagna" 
                             alt="Vegetarian Lasagna" 
                             class="w-full h-full object-cover"
                         >
@@ -423,10 +642,10 @@
                         <p class="food-price mt-1">$28.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="main-courses">
+                <div class="menu-card" data-food-id="lobster-risotto" data-category="main-courses">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/d48b52?text=Lobster+Risotto" 
                             alt="Lobster Risotto" 
                             class="w-full h-full object-cover"
                         >
@@ -437,10 +656,10 @@
                         <p class="food-price mt-1">$55.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="main-courses">
+                <div class="menu-card" data-food-id="pork-chop" data-category="main-courses">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/6b4e3e?text=Pork+Chop" 
                             alt="Pork Chop with Apple Chutney" 
                             class="w-full h-full object-cover"
                         >
@@ -452,10 +671,10 @@
                     </div>
                 </div>
 
-                <div class="menu-card" data-category="entrées">
+                <div class="menu-card" data-food-id="shrimp-cocktail" data-category="entrées">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/e0c4a3?text=Shrimp+Cocktail" 
                             alt="Shrimp Cocktail" 
                             class="w-full h-full object-cover"
                         >
@@ -466,10 +685,10 @@
                         <p class="food-price mt-1">$24.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="entrées">
+                <div class="menu-card" data-food-id="foie-gras" data-category="entrées">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/b09e8f?text=Foie+Gras" 
                             alt="Foie Gras Terrine" 
                             class="w-full h-full object-cover"
                         >
@@ -480,10 +699,10 @@
                         <p class="food-price mt-1">$32.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="entrées">
+                <div class="menu-card" data-food-id="oysters-rockefeller" data-category="entrées">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/788c69?text=Oysters+Rockefeller" 
                             alt="Oysters Rockefeller" 
                             class="w-full h-full object-cover"
                         >
@@ -494,10 +713,10 @@
                         <p class="food-price mt-1">$29.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="entrées">
+                <div class="menu-card" data-food-id="tuna-tartare" data-category="entrées">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/d24c4c?text=Tuna+Tartare" 
                             alt="Tuna Tartare" 
                             class="w-full h-full object-cover"
                         >
@@ -508,10 +727,10 @@
                         <p class="food-price mt-1">$26.50</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="entrées">
+                <div class="menu-card" data-food-id="prosciutto-melon" data-category="entrées">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/f0d099?text=Prosciutto+Melon" 
                             alt="Prosciutto Wrapped Melon" 
                             class="w-full h-full object-cover"
                         >
@@ -523,10 +742,10 @@
                     </div>
                 </div>
 
-                <div class="menu-card" data-category="accompaniments">
+                <div class="menu-card" data-food-id="truffle-mashed" data-category="accompaniments">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/c0c0c0?text=Mashed+Potatoes" 
                             alt="Truffle Mashed Potatoes" 
                             class="w-full h-full object-cover"
                         >
@@ -537,10 +756,10 @@
                         <p class="food-price mt-1">$12.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="accompaniments">
+                <div class="menu-card" data-food-id="grilled-asparagus" data-category="accompaniments">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/509b50?text=Grilled+Asparagus" 
                             alt="Asparagus with Hollandaise" 
                             class="w-full h-full object-cover"
                         >
@@ -551,10 +770,10 @@
                         <p class="food-price mt-1">$10.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="accompaniments">
+                <div class="menu-card" data-food-id="creamed-spinach" data-category="accompaniments">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/3b5a44?text=Creamed+Spinach" 
                             alt="Creamed Spinach" 
                             class="w-full h-full object-cover"
                         >
@@ -565,10 +784,10 @@
                         <p class="food-price mt-1">$9.50</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="accompaniments">
+                <div class="menu-card" data-food-id="pommes-frites" data-category="accompaniments">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/FFD700?text=Pommes+Frites" 
                             alt="Pommes Frites" 
                             class="w-full h-full object-cover"
                         >
@@ -579,10 +798,10 @@
                         <p class="food-price mt-1">$8.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="accompaniments">
+                <div class="menu-card" data-food-id="wild-mushrooms" data-category="accompaniments">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/705a4e?text=Wild+Mushrooms" 
                             alt="Sautéed Wild Mushrooms" 
                             class="w-full h-full object-cover"
                         >
@@ -594,10 +813,10 @@
                     </div>
                 </div>
 
-                <div class="menu-card" data-category="soup">
+                <div class="menu-card" data-food-id="lentil-soup" data-category="soup">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/e0b087?text=Creamy+Lentil+Soup" 
                             alt="Creamy Lentil Soup" 
                             class="w-full h-full object-cover"
                         >
@@ -608,10 +827,10 @@
                         <p class="food-price mt-1">$12.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="soup">
+                <div class="menu-card" data-food-id="french-onion-soup" data-category="soup">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/d2a37e?text=French+Onion+Soup" 
                             alt="French Onion Soup" 
                             class="w-full h-full object-cover"
                         >
@@ -622,10 +841,10 @@
                         <p class="food-price mt-1">$15.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="soup">
+                <div class="menu-card" data-food-id="lobster-bisque" data-category="soup">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/b05e5e?text=Lobster+Bisque" 
                             alt="Lobster Bisque" 
                             class="w-full h-full object-cover"
                         >
@@ -636,10 +855,10 @@
                         <p class="food-price mt-1">$18.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="soup">
+                <div class="menu-card" data-food-id="tomato-basil-soup" data-category="soup">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
+                            src="https://via.placeholder.com/150/a83a3a?text=Tomato+Basil+Soup" 
                             alt="Tomato Basil Soup" 
                             class="w-full h-full object-cover"
                         >
@@ -650,205 +869,586 @@
                         <p class="food-price mt-1">$11.00</p>
                     </div>
                 </div>
-                <div class="menu-card" data-category="soup">
+                <div class="menu-card" data-food-id="mushrooom-velouté" data-category="soup">
                     <div class="card-image-wrapper">
                         <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
-                            alt="Mushroom Consommé" 
+                            src="https://via.placeholder.com/150/8b8377?text=Mushroom+Velouté" 
+                            alt="Mushroom Velouté" 
                             class="w-full h-full object-cover"
                         >
                     </div>
                     <div class="mt-3">
-                        <p class="food-title text-base truncate">Clear Mushroom Consommé</p>
+                        <p class="food-title text-base truncate">Mushroom Velouté</p>
                         <p class="food-description text-xs truncate">Soup</p>
-                        <p class="food-price mt-1">$13.00</p>
-                    </div>
-                </div>
-
-                <div class="menu-card" data-category="amuse-bouche">
-                    <div class="card-image-wrapper">
-                        <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
-                            alt="Smoked Salmon on Toast Point" 
-                            class="w-full h-full objec
-                            <p class="food-title text-base truncate">Smoked Salmon Toast</p>
-                        <p class="food-description text-xs truncate">Amuse-Bouche</p>
-                        <p class="food-price mt-1">$9.00</p>
-                    </div>
-                </div>
-                <div class="menu-card" data-category="amuse-bouche">
-                    <div class="card-image-wrapper">
-                        <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
-                            alt="Mini Quiche Lorraine" 
-                            class="w-full h-full object-cover"
-                        >
-                    </div>
-                    <div class="mt-3">
-                        <p class="food-title text-base truncate">Mini Quiche Lorraine</p>
-                        <p class="food-description text-xs truncate">Amuse-Bouche</p>
-                        <p class="food-price mt-1">$7.50</p>
-                    </div>
-                </div>
-                <div class="menu-card" data-category="amuse-bouche">
-                    <div class="card-image-wrapper">
-                        <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
-                            alt="Prosciutto Wrapped Fig" 
-                            class="w-full h-full object-cover"
-                        >
-                    </div>
-                    <div class="mt-3">
-                        <p class="food-title text-base truncate">Prosciutto Wrapped Fig</p>
-                        <p class="food-description text-xs truncate">Amuse-Bouche</p>
-                        <p class="food-price mt-1">$8.00</p>
+                        <p class="food-price mt-1">$14.50</p>
                     </div>
                 </div>
                 
-                <div class="menu-card" data-category="rotisserie">
-                    <div class="card-image-wrapper">
-                        <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
-                            alt="Rotisserie Chicken" 
-                            class="w-full h-full object-cover"
-                        >
-                    </div>
-                    <div class="mt-3">
-                        <p class="food-title text-base truncate">Rotisserie Chicken</p>
-                        <p class="food-description text-xs truncate">Rotisserie</p>
-                        <p class="food-price mt-1">$22.00</p>
-                    </div>
-                </div>
-                <div class="menu-card" data-category="rotisserie">
-                    <div class="card-image-wrapper">
-                        <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
-                            alt="Rotisserie Duck" 
-                            class="w-full h-full object-cover"
-                        >
-                    </div>
-                    <div class="mt-3">
-                        <p class="food-title text-base truncate">Peking Rotisserie Duck</p>
-                        <p class="food-description text-xs truncate">Rotisserie</p>
-                        <p class="food-price mt-1">$45.00</p>
-                    </div>
-                </div>
+            </div>
+            
+            <a href="waiter_cart.html" class="floating-cart-button" id="open-order-summary">
+                <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.256c-.669 0-1.189-.578-1.119-1.243l1.263-12c.094-.894.86-1.554 1.777-1.554h9.914c.917 0 1.683.66 1.777 1.554Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 10.5a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v-3.75ZM12 10.5a.75.75 0 0 1 .75-.75h.008c.414 0 .75.336.75.75v3.75a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-3.75ZM15.75 10.5a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-.75.75h-.75a.75.75 0 0 1-.75-.75v-3.75Z" />
+                </svg>
+                <span id="floating-cart-count" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">0</span>
+            </a>
 
-                <div class="menu-card" data-category="dessert">
-                    <div class="card-image-wrapper">
-                        <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
-                            alt="Chocolate Lava Cake" 
-                            class="w-full h-full object-cover"
-                        >
-                    </div>
-                    <div class="mt-3">
-                        <p class="food-title text-base truncate">Chocolate Lava Cake</p>
-                        <p class="food-description text-xs truncate">Dessert</p>
-                        <p class="food-price mt-1">$14.00</p>
-                    </div>
-                </div>
-                <div class="menu-card" data-category="dessert">
-                    <div class="card-image-wrapper">
-                        <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
-                            alt="Crème Brûlée" 
-                            class="w-full h-full object-cover"
-                        >
-                    </div>
-                    <div class="mt-3">
-                        <p class="food-title text-base truncate">Classic Crème Brûlée</p>
-                        <p class="food-description text-xs truncate">Dessert</p>
-                        <p class="food-price mt-1">$12.00</p>
-                    </div>
-                </div>
-                <div class="menu-card" data-category="dessert">
-                    <div class="card-image-wrapper">
-                        <img 
-                            src="[PASTE YOUR FULL IMAGE URL HERE, E.G., FROM AN IMAGE HOSTING SITE]" 
-                            alt="Tiramisu" 
-                            class="w-full h-full object-cover"
-                        >
-                    </div>
-                    <div class="mt-3">
-                        <p class="food-title text-base truncate">Rich Tiramisu</p>
-                        <p class="food-description text-xs truncate">Dessert</p>
-                        <p class="food-price mt-1">$13.50</p>
-                    </div>
-                </div>
 
+        </main>
+    </div>
+    
+    <div id="food-detail-modal">
+        <div id="food-detail-content">
+            
+            <div class="food-detail-header-section">
+                <button id="modal-back-button" class="food-detail-back-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                    </svg>
+                </button>
+                <h2 class="food-detail-title" id="modal-category"></h2>
+            </div>
+            
+            <div class="food-detail-main-info">
+                <div class="food-detail-image-container">
+                    <img id="modal-image" src="" alt="Food Item" class="food-detail-image">
+                </div>
+                
+                <a href="waiter_cart.html" class="small-cart-bubble">
+                    <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.256c-.669 0-1.189-.578-1.119-1.243l1.263-12c.094-.894.86-1.554 1.777-1.554h9.914c.917 0 1.683.66 1.777 1.554Z" />
+                    </svg>
+                    <span id="small-cart-count" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">0</span>
+                </a>
 
             </div>
             
-        </main>
-
+            <div class="food-detail-text-section">
+                <p class="food-detail-name" id="modal-name"></p>
+                <p class="food-detail-description" id="modal-description"></p>
+                <p class="food-detail-price" id="modal-price"></p>
+                
+                </div>
+            
+            <div class="food-detail-floating-bar">
+                <div class="quantity-controls">
+                    <button class="qty-button" id="decrement-qty">−</button>
+                    <span class="qty-display" id="current-qty">0</span>
+                    <button class="qty-button" id="increment-qty">+</button>
+                </div>
+                <div class="add-to-cart-button" id="add-to-cart-button">
+                    <svg class="add-to-cart-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                </div>
+            </div>
+            
+        </div>
     </div>
 
     <script>
+        // --- 1. Food Data Model (Expanded for all listed items) ---
+        const foodData = {
+            "greek-salad": {
+                name: "Easy Greek Salad",
+                description: "A vibrant, no-lettuce salad featuring tomatoes, cucumbers, red onions, Kalamata olives, and large pieces of feta. Drizzled with extra virgin olive oil and oregano for a classic, pure Mediterranean taste.",
+                price: 21.99,
+                category: "Greek Salad",
+                search_category: "salad",
+                image: "https://i.imgur.com/k9b8Z8E.png" // Using the provided image style placeholder
+            },
+            "chicken-salad": {
+                name: "Grilled Chicken Salad",
+                description: "Marinated and grilled chicken breast served over mixed greens with cherry tomatoes, shredded carrots, and a light balsamic vinaigrette.",
+                price: 25.50,
+                category: "Salad",
+                search_category: "salad",
+                image: "https://via.placeholder.com/600/457c4f?text=Grilled+Chicken+Salad+Details"
+            },
+            "caesar-salad": {
+                name: "Caesar Salad Classic",
+                description: "Crisp romaine lettuce, house-made croutons, grated Parmesan cheese, and a creamy Caesar dressing.",
+                price: 19.00,
+                category: "Salad",
+                search_category: "salad",
+                image: "https://via.placeholder.com/600/9a8c79?text=Caesar+Salad+Details"
+            },
+            "quinoa-arugula": {
+                name: "Quinoa and Arugula Salad",
+                description: "A fresh and light salad with protein-rich quinoa, peppery arugula, pine nuts, and a lemon-herb dressing.",
+                price: 23.00,
+                category: "Salad",
+                search_category: "salad",
+                image: "https://via.placeholder.com/600/789a69?text=Quinoa+Arugula+Salad+Details"
+            },
+            "caprese-skewers": {
+                name: "Caprese Salad Skewers",
+                description: "Cherry tomatoes, fresh mozzarella balls, and basil leaves drizzled with balsamic glaze, served on skewers.",
+                price: 18.50,
+                category: "Salad",
+                search_category: "salad",
+                image: "https://via.placeholder.com/600/a83a3a?text=Caprese+Skewers+Details"
+            },
+            "espresso-martini": {
+                name: "Espresso Martini",
+                description: "A classic blend of vodka, coffee liqueur, and freshly brewed espresso, shaken and served in a chilled martini glass.",
+                price: 14.00,
+                category: "Beverages",
+                search_category: "beverages",
+                image: "https://via.placeholder.com/600/1c1c1c?text=Espresso+Martini+Details"
+            },
+            "orange-juice": {
+                name: "Fresh Orange Juice",
+                description: "Freshly squeezed seasonal oranges. A bright and refreshing accompaniment to any meal.",
+                price: 8.00,
+                category: "Beverages",
+                search_category: "beverages",
+                image: "https://via.placeholder.com/600/FFD700?text=Orange+Juice+Details"
+            },
+            "meridian-signature": {
+                name: "Meridian Signature",
+                description: "Our proprietary house cocktail featuring artisanal gin, elderflower, and a hint of fresh lime.",
+                price: 16.50,
+                category: "Beverages",
+                search_category: "beverages",
+                image: "https://via.placeholder.com/600/509b50?text=Meridian+Signature+Details"
+            },
+            "sparkling-water": {
+                name: "Sparkling Water",
+                description: "Premium carbonated water, served chilled with a slice of lemon and mint.",
+                price: 6.00,
+                category: "Beverages",
+                search_category: "beverages",
+                image: "https://via.placeholder.com/600/aed9e0?text=Sparkling+Water+Details"
+            },
+            "pinot-noir": {
+                name: "Pinot Noir (Glass)",
+                description: "A glass of our curated Pinot Noir selection, featuring notes of cherry and earth.",
+                price: 18.00,
+                category: "Beverages",
+                search_category: "beverages",
+                image: "https://via.placeholder.com/600/9e3a3a?text=Pinot+Noir+Details"
+            },
+            "beef-tenderloin": {
+                name: "Beef Tenderloin",
+                description: "8oz of prime beef tenderloin, seared to perfection and served with a red wine reduction.",
+                price: 45.99,
+                category: "Main Courses",
+                search_category: "main-courses",
+                image: "https://via.placeholder.com/600/4a2c2c?text=Beef+Tenderloin+Details"
+            },
+            "pan-seared-scallops": {
+                name: "Pan-Seared Scallops",
+                description: "Jumbo scallops seared in butter, served with a delicate saffron risotto.",
+                price: 39.50,
+                category: "Main Courses",
+                search_category: "main-courses",
+                image: "https://via.placeholder.com/600/e0e0e0?text=Pan-Seared+Scallops+Details"
+            },
+            "vegetarian-lasagna": {
+                name: "Vegetarian Lasagna",
+                description: "Layers of pasta, ricotta, spinach, and marinara sauce, topped with melted mozzarella.",
+                price: 28.00,
+                category: "Main Courses",
+                search_category: "main-courses",
+                image: "https://via.placeholder.com/600/8a3a3a?text=Vegetarian+Lasagna+Details"
+            },
+            "lobster-risotto": {
+                name: "Lobster Risotto",
+                description: "Creamy Arborio rice stirred with fresh lobster meat and a hint of lemon zest.",
+                price: 55.00,
+                category: "Main Courses",
+                search_category: "main-courses",
+                image: "https://via.placeholder.com/600/d48b52?text=Lobster+Risotto+Details"
+            },
+            "pork-chop": {
+                name: "Pork Chop",
+                description: "Thick-cut, bone-in pork chop, grilled and served with a savory apple chutney.",
+                price: 35.99,
+                category: "Main Courses",
+                search_category: "main-courses",
+                image: "https://via.placeholder.com/600/6b4e3e?text=Pork+Chop+Details"
+            },
+            "shrimp-cocktail": {
+                name: "Jumbo Shrimp Cocktail",
+                description: "Five jumbo shrimp, poached and chilled, served with our zesty cocktail sauce.",
+                price: 24.00,
+                category: "Entrées",
+                search_category: "entrées",
+                image: "https://via.placeholder.com/600/e0c4a3?text=Shrimp+Cocktail+Details"
+            },
+            "foie-gras": {
+                name: "Foie Gras Terrine",
+                description: "Seared duck liver terrine served with fig jam and toasted brioche.",
+                price: 32.00,
+                category: "Entrées",
+                search_category: "entrées",
+                image: "https://via.placeholder.com/600/b09e8f?text=Foie+Gras+Details"
+            },
+            "oysters-rockefeller": {
+                name: "Oysters Rockefeller",
+                description: "Half dozen oysters baked with spinach, butter, and a hint of herbs.",
+                price: 29.00,
+                category: "Entrées",
+                search_category: "entrées",
+                image: "https://via.placeholder.com/600/788c69?text=Oysters+Rockefeller+Details"
+            },
+            "tuna-tartare": {
+                name: "Spicy Tuna Tartare",
+                description: "Finely diced Ahi tuna mixed with a spicy sesame dressing, served with avocado and crispy wontons.",
+                price: 26.50,
+                category: "Entrées",
+                search_category: "entrées",
+                image: "https://via.placeholder.com/600/d24c4c?text=Tuna+Tartare+Details"
+            },
+            "prosciutto-melon": {
+                name: "Prosciutto Melon",
+                description: "Classic Italian appetizer: sweet cantaloupe wrapped in thinly sliced prosciutto.",
+                price: 19.50,
+                category: "Entrées",
+                search_category: "entrées",
+                image: "https://via.placeholder.com/600/f0d099?text=Prosciutto+Melon+Details"
+            },
+            "truffle-mashed": {
+                name: "Truffle Mashed Potatoes",
+                description: "Creamy mashed potatoes infused with white truffle oil.",
+                price: 12.00,
+                category: "Accompaniments",
+                search_category: "accompaniments",
+                image: "https://via.placeholder.com/600/c0c0c0?text=Mashed+Potatoes+Details"
+            },
+            "grilled-asparagus": {
+                name: "Grilled Asparagus",
+                description: "Fresh asparagus spears lightly seasoned and grilled, served with hollandaise sauce.",
+                price: 10.00,
+                category: "Accompaniments",
+                search_category: "accompaniments",
+                image: "https://via.placeholder.com/600/509b50?text=Grilled+Asparagus+Details"
+            },
+            "creamed-spinach": {
+                name: "Classic Creamed Spinach",
+                description: "Chopped spinach in a rich, creamy sauce. A classic steakhouse side.",
+                price: 9.50,
+                category: "Accompaniments",
+                search_category: "accompaniments",
+                image: "https://via.placeholder.com/600/3b5a44?text=Creamed+Spinach+Details"
+            },
+            "pommes-frites": {
+                name: "Crispy Pommes Frites",
+                description: "Thinly cut French fries, double-fried for maximum crispiness.",
+                price: 8.00,
+                category: "Accompaniments",
+                search_category: "accompaniments",
+                image: "https://via.placeholder.com/600/FFD700?text=Pommes+Frites+Details"
+            },
+            "wild-mushrooms": {
+                name: "Wild Mushroom Sauté",
+                description: "A medley of seasonal wild mushrooms sautéed with garlic, butter, and herbs.",
+                price: 11.50,
+                category: "Accompaniments",
+                search_category: "accompaniments",
+                image: "https://via.placeholder.com/600/705a4e?text=Wild+Mushrooms+Details"
+            },
+            "lentil-soup": {
+                name: "Creamy Lentil Soup",
+                description: "Hearty lentil soup blended smooth with vegetables and a touch of cream.",
+                price: 12.00,
+                category: "Soup",
+                search_category: "soup",
+                image: "https://via.placeholder.com/600/e0b087?text=Creamy+Lentil+Soup+Details"
+            },
+            "french-onion-soup": {
+                name: "French Onion Soup",
+                description: "Caramelized onions in a rich beef broth, topped with a crouton and Gruyère cheese.",
+                price: 15.00,
+                category: "Soup",
+                search_category: "soup",
+                image: "https://via.placeholder.com/600/d2a37e?text=French+Onion+Soup+Details"
+            },
+            "lobster-bisque": {
+                name: "Rich Lobster Bisque",
+                description: "A creamy and decadent soup with chunks of lobster meat and a hint of sherry.",
+                price: 18.00,
+                category: "Soup",
+                search_category: "soup",
+                image: "https://via.placeholder.com/600/b05e5e?text=Lobster+Bisque+Details"
+            },
+            "tomato-basil-soup": {
+                name: "Tomato Basil Soup",
+                description: "Classic tomato soup infused with fresh basil, perfect for dipping.",
+                price: 11.00,
+                category: "Soup",
+                search_category: "soup",
+                image: "https://via.placeholder.com/600/a83a3a?text=Tomato+Basil+Soup+Details"
+            },
+            "mushrooom-velouté": {
+                name: "Mushroom Velouté",
+                description: "A smooth, velvety cream of mushroom soup, a French classic.",
+                price: 14.50,
+                category: "Soup",
+                search_category: "soup",
+                image: "https://via.placeholder.com/600/8b8377?text=Mushroom+Velouté+Details"
+            }
+            // Add other categories for completeness in the UI, even if data isn't here
+            // e.g. "rotisserie", "amuse-bouche", "dessert" - these will rely on search_category filter being robust
+        };
+        
+        // --- 2. Cart Utility Functions ---
+        const CART_KEY = 'meridian_waiter_cart';
+        const FOOD_DATA_KEY = 'meridian_food_data';
 
-        const searchInput = document.getElementById('search-input');
-        const menuCards = document.querySelectorAll('.menu-card');
-
-        searchInput.addEventListener('keyup', function() {
-            const searchTerm = searchInput.value.toLowerCase().trim();
-
-            menuCards.forEach(card => {
-
-                const titleElement = card.querySelector('.food-title');
-                const descElement = card.querySelector('.food-description');
-
-                const title = titleElement ? titleElement.textContent.toLowerCase() : '';
-                const description = descElement ? descElement.textContent.toLowerCase() : '';
-
-                const isMatch = title.includes(searchTerm) || description.includes(searchTerm);
-
-                if (isMatch) {
-
-                    card.classList.remove('hidden');
-                } else {
-
-                    card.classList.add('hidden');
-                }
-            });
-        });
-
-
-        const categoryBar = document.getElementById('category-bar');
-        const categoryPills = document.querySelectorAll('.category-pill');
-        const currentCategoryTitle = document.getElementById('current-category-title');
-
-        function filterMenu(category) {
-            
-
-            searchInput.value = '';
-            searchInput.dispatchEvent(new Event('keyup')); 
-
-            menuCards.forEach(card => {
-                const cardCategory = card.getAttribute('data-category');
-
-                if (category === 'all' || cardCategory === category) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
-            });
-
-            const categoryName = categoryPills.find(pill => pill.getAttribute('data-category') === category)?.textContent.trim().replace(/.*?\s/, '') || 'All Menu Items';
-            currentCategoryTitle.textContent = `${categoryName} Menu Items`;
+        function getCart() {
+            const cartString = localStorage.getItem(CART_KEY);
+            // Cart is an object where keys are food-ids and values are quantities.
+            return cartString ? JSON.parse(cartString) : {};
         }
 
-        categoryPills.forEach(pill => {
-            pill.addEventListener('click', function() {
+        function saveCart(cart) {
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        }
 
-                categoryPills.forEach(p => p.classList.remove('active-category'));
+        function updateCartCountDisplay() {
+            const cart = getCart();
+            let totalItems = 0;
+            for (const foodId in cart) {
+                totalItems += cart[foodId];
+            }
+            
+            const countElements = document.querySelectorAll('#floating-cart-count, #small-cart-count');
+            countElements.forEach(el => {
+                el.textContent = totalItems;
+                el.style.display = totalItems > 0 ? 'inline-flex' : 'none';
+            });
+        }
+        
+        function saveFoodData() {
+            // Save the food data to localStorage so waiter_cart.html can access item details (name, price)
+            localStorage.setItem(FOOD_DATA_KEY, JSON.stringify(foodData));
+        }
+
+        // --- 3. Element Selectors & State ---
+        const menuCards = document.querySelectorAll('.menu-card');
+        const modal = document.getElementById('food-detail-modal');
+        const modalBackButton = document.getElementById('modal-back-button');
+        const modalName = document.getElementById('modal-name');
+        const modalCategory = document.getElementById('modal-category');
+        const modalDescription = document.getElementById('modal-description');
+        const modalPrice = document.getElementById('modal-price');
+        const modalImage = document.getElementById('modal-image');
+        const incrementQtyButton = document.getElementById('increment-qty');
+        const decrementQtyButton = document.getElementById('decrement-qty');
+        const currentQtyDisplay = document.getElementById('current-qty');
+        const addToCartButton = document.getElementById('add-to-cart-button');
+        const floatingCartButton = document.getElementById('open-order-summary');
+
+        // New Elements for filtering/searching
+        const searchInput = document.getElementById('search-input');
+        const categoryPills = document.querySelectorAll('.category-pill');
+        const currentCategoryTitle = document.getElementById('current-category-title');
+        const categoryBar = document.getElementById('category-bar');
+
+
+        let currentQuantity = 0; 
+        let currentFoodId = null; // Track which food item is open in the modal
+        let activeCategory = 'all'; // State for active category filtering
+
+        // --- 4. Menu & Filter Functions (NEW & MODIFIED) ---
+
+        function filterMenu(category, searchTerm) {
+            
+            // Normalize inputs
+            const term = searchTerm.toLowerCase().trim();
+            const categoryName = category.toLowerCase();
+            
+            menuCards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+                const cardFoodId = card.getAttribute('data-food-id');
+                const foodItem = foodData[cardFoodId];
+
+                // Check Category Match
+                // If 'all', all categories match. Otherwise, check for direct category match.
+                const categoryMatch = categoryName === 'all' || cardCategory === categoryName;
                 
+                // Check Search Match
+                let searchMatch = true;
+                if (term) {
+                    // Check if search term is in food name or category in the foodData model
+                    const nameMatch = foodItem && foodItem.name.toLowerCase().includes(term);
+                    const descMatch = foodItem && foodItem.description.toLowerCase().includes(term);
+                    searchMatch = nameMatch || descMatch || cardCategory.includes(term);
+                }
 
-                this.classList.add('active-category');
+                // Show or hide the card
+                if (categoryMatch && searchMatch) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+        
+        function handleCategoryClick(event) {
+            const clickedPill = event.currentTarget;
+            const newCategory = clickedPill.getAttribute('data-category');
 
-                filterMenu(this.getAttribute('data-category'));
+            // 1. Update Active State
+            categoryPills.forEach(pill => {
+                pill.classList.remove('active-category');
+            });
+            clickedPill.classList.add('active-category');
+            
+            // 2. Update State and Title
+            activeCategory = newCategory;
+            const titleText = clickedPill.textContent.trim().replace(/[\s\S]/, (match) => match.toUpperCase()); // Capitalize first letter
+            currentCategoryTitle.textContent = newCategory === 'all' ? 'All Menu Items' : titleText + ' Items';
+
+            // 3. Filter Menu
+            filterMenu(activeCategory, searchInput.value);
+            
+            // 4. Reset Search Input on category switch for clean separation
+            searchInput.value = '';
+        }
+
+        // --- 5. Modal Functions ---
+        
+        function openFoodDetailModal(foodId) {
+            const food = foodData[foodId];
+            if (!food) {
+                console.error("Food item not found for ID:", foodId);
+                return;
+            }
+
+            currentFoodId = foodId;
+
+            // Check if item is already in cart to set initial quantity
+            const cart = getCart();
+            currentQuantity = cart[currentFoodId] || 0;
+
+            // Populate the modal with data
+            modalName.textContent = food.name;
+            // Use the nicer 'category' name from foodData for the modal title
+            modalCategory.textContent = food.category.toUpperCase(); 
+            modalDescription.textContent = food.description;
+            modalPrice.textContent = `$${food.price.toFixed(2)}`;
+            modalImage.src = food.image;
+            
+            updateQuantityDisplay();
+            
+            // Show the modal
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling the background
+        }
+
+        function closeFoodDetailModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Re-enable background scrolling
+            currentFoodId = null; // Reset item tracker
+        }
+
+        function updateQuantityDisplay() {
+            currentQtyDisplay.textContent = currentQuantity;
+            
+            // Update the cart count bubble in the modal
+            const cart = getCart();
+            const currentItemInCartCount = cart[currentFoodId] || 0;
+            // totalItemsInCart() - currentItemInCartCount = current total *without* the item in the modal
+            const newCartTotal = (totalItemsInCart() - currentItemInCartCount) + currentQuantity;
+
+            const smallCartCountEl = document.getElementById('small-cart-count');
+            smallCartCountEl.textContent = newCartTotal;
+            smallCartCountEl.style.display = newCartTotal > 0 ? 'inline-flex' : 'none';
+
+            // Visually update the Add to Cart button based on quantity
+            const addIconPath = 'M12 4.5v15m7.5-7.5h-15'; // Plus icon
+            // const removeIconPath = 'M19.5 12h-15'; // Placeholder for remove icon if needed
+            const svgPath = addToCartButton.querySelector('svg path[stroke-width="2"]');
+
+            if (currentQuantity > 0) {
+                addToCartButton.style.backgroundColor = 'var(--meridian-gold)';
+                svgPath.setAttribute('d', addIconPath); // Keep the Plus icon when adding or modifying quantity
+            } else {
+                addToCartButton.style.backgroundColor = '#FFFFFF';
+            }
+        }
+        
+        function totalItemsInCart() {
+            const cart = getCart();
+            let totalItems = 0;
+            for (const foodId in cart) {
+                totalItems += cart[foodId];
+            }
+            return totalItems;
+        }
+
+        // --- 6. Event Listeners (Modified & Added) ---
+        
+        // Open modal when clicking a menu card
+        menuCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const foodId = this.getAttribute('data-food-id');
+                openFoodDetailModal(foodId);
             });
         });
+        
+        // Close modal when clicking the back button
+        modalBackButton.addEventListener('click', closeFoodDetailModal);
+        
+        // Quantity Controls
+        incrementQtyButton.addEventListener('click', () => {
+            currentQuantity++;
+            updateQuantityDisplay();
+        });
 
+        decrementQtyButton.addEventListener('click', () => {
+            if (currentQuantity > 0) {
+                currentQuantity--;
+                updateQuantityDisplay();
+            }
+        });
+        
+        // Add to Cart Logic
+        addToCartButton.addEventListener('click', () => {
+            if (!currentFoodId) return;
+
+            const cart = getCart();
+
+            if (currentQuantity > 0) {
+                cart[currentFoodId] = currentQuantity;
+            } else {
+                delete cart[currentFoodId];
+            }
+            
+            saveCart(cart);
+            updateCartCountDisplay();
+            
+            // You can replace this alert with a visual toast/snackbar later
+            // alert(`Order updated: ${currentFoodId} quantity set to ${currentQuantity}`);
+            
+            closeFoodDetailModal();
+        });
+        
+        // Search Input Listener
+        searchInput.addEventListener('input', (event) => {
+            // Reset active category to 'all' when typing in search bar
+            activeCategory = 'all';
+            categoryPills.forEach(pill => {
+                pill.classList.remove('active-category');
+                if (pill.getAttribute('data-category') === 'all') {
+                    pill.classList.add('active-category');
+                }
+            });
+            currentCategoryTitle.textContent = 'Search Results';
+
+            filterMenu(activeCategory, event.target.value);
+        });
+
+        // Category Pill Listeners
+        categoryPills.forEach(pill => {
+            pill.addEventListener('click', handleCategoryClick);
+        });
+
+        // Category Scroll Drag Functionality (for better mobile UX)
         let isDown = false;
         let startX;
         let scrollLeft;
@@ -868,12 +1468,21 @@
             categoryBar.classList.remove('active');
         });
         categoryBar.addEventListener('mousemove', (e) => {
-            if (!isDown) return; 
+            if(!isDown) return;
             e.preventDefault();
             const x = e.pageX - categoryBar.offsetLeft;
-            const walk = (x - startX) * 1.5; 
+            const walk = (x - startX) * 1.5; // Scroll-fast factor
             categoryBar.scrollLeft = scrollLeft - walk;
         });
+
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', () => {
+            saveFoodData(); // Ensure cart.html has the item details
+            updateCartCountDisplay(); // Initialize the counter display 
+            // Initial filter is for 'all' with an empty search term
+            filterMenu(activeCategory, searchInput.value);
+        });
+
 
     </script>
 </body>

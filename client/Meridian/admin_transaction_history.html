@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meridian - Transaction History</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Kapakana:wght@400;700&family=Lora:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Variables */
+        :root {
+            --meridian-dark-green: #3b5a44;
+            --meridian-gold: #FFD700;
+            --meridian-soft-white: #F4F4F6;
+            --meridian-filter-panel-bg: #dcdcdc; /* Custom gray-green background from picture */
+        }
+
+        body {
+            background-color: var(--meridian-soft-white);
+            font-family: Arial, sans-serif;
+            padding-bottom: 90px;
+        }
+
+        .meridian-logo {
+            font-family: 'Kapakana', cursive;
+            font-size: 2rem;
+            background: linear-gradient(180deg, var(--meridian-gold) 0%, #B8860B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            line-height: 1;
+        }
+
+        .transaction-card {
+            background: #FFFFFF;
+            border-radius: 14px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: var(--meridian-dark-green);
+            color: var(--meridian-gold);
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .table-row {
+            font-size: 0.85rem;
+            color: #222;
+        }
+        
+        .table-row > div:nth-child(1),
+        .table-row > div:nth-child(2) {
+            border-right: 1px dashed #cccccc; 
+        }
+
+        /* --- Custom Bottom Nav Styles --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: #fafafa;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+            display: grid;
+            grid-template-columns: repeat(2, 1fr) auto repeat(2, 1fr);
+            align-items: center;
+            z-index: 50;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.2s;
+        }
+        .nav-item.active {
+            color: var(--meridian-dark-green);
+        }
+
+        .plus-btn {
+            width: 60px;
+            height: 60px;
+            background: var(--meridian-dark-green);
+            color: white;
+            border-radius: 50%;
+            font-size: 2rem;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(-18px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0; 
+        }
+
+        /* --- MODAL FILTER PANEL STYLES --- */
+        .filter-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+            z-index: 100;
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center; /* Center vertically */
+        }
+        
+        .filter-content {
+            background: var(--meridian-filter-panel-bg); /* Gray-green background */
+            border-radius: 20px;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 350px;
+            box-shadow: 0 8px 16px rgba(0,0,0,.3);
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .filter-header h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #222;
+        }
+
+        /* Ensure native date picker icon is visible and input is flush */
+        .date-input {
+            appearance: none;
+            /* Make space for the native calendar icon typically placed on the right, 
+               but prevent our custom SVG from interfering */
+            padding-right: 0.75rem; 
+        }
+        
+    </style>
+</head>
+
+<body>
+
+<div class="max-w-md mx-auto px-4 pt-4">
+
+    <div class="flex justify-between items-start mb-6">
+        <div>
+            <h1 class="meridian-logo">Meridian</h1>
+            <h2 class="text-2xl font-bold mt-1 text-gray-800">Transaction History</h2>
+        </div>
+
+        <div id="filterBtn" class="border border-gray-300 bg-white rounded-lg p-3 text-gray-600 shadow-sm cursor-pointer hover:bg-gray-100 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                 viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M3 4h18l-7 8v6l-4 2v-8L3 4z"/>
+            </svg>
+        </div>
+    </div>
+    
+    <div class="transaction-card">
+
+        <div class="table-header grid grid-cols-3 px-4 py-2">
+            <div class="text-center">Order ID</div>
+            <div class="text-center">Total Amount</div>
+            <div class="text-center">Method</div>
+        </div>
+
+        <div class="divide-y divide-gray-200">
+            <div class="table-row grid grid-cols-3 px-4 py-3 hover:bg-gray-50 transition duration-150 cursor-pointer">
+                <div class="text-center">12122550</div>
+                <div class="text-center font-semibold text-green-700">$95.97</div>
+                <div class="text-center text-gray-600">Credit Card</div>
+            </div>
+
+            <div class="table-row grid grid-cols-3 px-4 py-3 hover:bg-gray-50 transition duration-150 cursor-pointer">
+                <div class="text-center">12122549</div>
+                <div class="text-center font-semibold text-green-700">$35.65</div>
+                <div class="text-center text-gray-600">Credit Card</div>
+            </div>
+
+            <div class="table-row grid grid-cols-3 px-4 py-3 hover:bg-gray-50 transition duration-150 cursor-pointer">
+                <div class="text-center">12122548</div>
+                <div class="text-center font-semibold text-green-700">$15.20</div>
+                <div class="text-center text-gray-600">Cash</div>
+            </div>
+
+            <div class="table-row grid grid-cols-3 px-4 py-3 hover:bg-gray-50 transition duration-150 cursor-pointer">
+                <div class="text-center">12122547</div>
+                <div class="text-center font-semibold text-green-700">$5.50</div>
+                <div class="text-center text-gray-600">Maya</div>
+            </div>
+
+            <div class="table-row grid grid-cols-3 px-4 py-3 hover:bg-gray-50 transition duration-150 cursor-pointer">
+                <div class="text-center">12122546</div>
+                <div class="text-center font-semibold text-green-700">$42.00</div>
+                <div class="text-center text-gray-600">Cash</div>
+            </div>
+            
+            <div class="table-row grid grid-cols-3 px-4 py-3 hover:bg-gray-50 transition duration-150 cursor-pointer">
+                <div class="text-center">12122545</div>
+                <div class="text-center font-semibold text-green-700">$120.45</div>
+                <div class="text-center text-gray-600">GCash</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-center items-center gap-4 text-sm mt-6 text-gray-600 font-semibold">
+        <span class="opacity-50 cursor-not-allowed">&laquo;</span>
+        <span class="opacity-50 cursor-not-allowed">&lsaquo;</span>
+        <span class="text-gray-900 border-b-2 border-meridian-dark-green pb-1">Page 1</span>
+        <span class="cursor-pointer hover:text-gray-800">&rsaquo;</span>
+        <span class="cursor-pointer hover:text-gray-800">&raquo;</span>
+    </div>
+</div>
+
+<div id="filterPanelModal" class="filter-modal">
+    <div id="filterContent" class="filter-content">
+        <div class="filter-header">
+            <button id="closeFilterBtn" class="text-gray-800 hover:text-gray-600 transition p-1">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <h3 class="flex-grow text-center pr-6">Select Date</h3>
+        </div>
+
+        <div class="space-y-4">
+            <div>
+                <label class="text-sm font-medium text-gray-700">From</label>
+                <input type="date"
+                       class="date-input w-full p-2 mt-1 rounded border border-gray-400 focus:ring-green-700 focus:border-green-700 bg-white text-gray-700">
+            </div>
+
+            <div>
+                <label class="text-sm font-medium text-gray-700">To</label>
+                <input type="date"
+                       class="date-input w-full p-2 mt-1 rounded border border-gray-400 focus:ring-green-700 focus:border-green-700 bg-white text-gray-700">
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button class="text-white px-6 py-2 rounded-lg text-base font-semibold shadow-md hover:opacity-90 transition"
+                        style="background-color: var(--meridian-dark-green);">
+                    Filter
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<nav class="bottom-nav px-6">
+    <a href="#" class="nav-item active">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+    </a>
+
+    <a href="#" class="nav-item">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+        </svg>
+    </a>
+
+    <div class="flex justify-center">
+        <div class="plus-btn">+</div>
+    </div>
+
+    <a href="#" class="nav-item">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992h-.001M19.32 19.32a15.228 15.228 0 0 1-2.932 1.336A15.215 15.215 0 0 1 12 21.75c-3.731 0-7.44-1.102-10.519-3.213m.001-3.616a15.228 15.228 0 0 1 2.932-1.336A15.215 15.215 0 0 1 12 2.25c3.731 0 7.44 1.102 10.519 3.213" />
+        </svg>
+    </a>
+    
+    <a href="#" class="nav-item">
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+        </svg>
+    </a>
+</nav>
+
+<script>
+    const filterBtn = document.getElementById('filterBtn');
+    const closeFilterBtn = document.getElementById('closeFilterBtn');
+    const filterPanelModal = document.getElementById('filterPanelModal');
+    const filterContent = document.getElementById('filterContent');
+
+    function openFilterModal() {
+        filterPanelModal.style.display = 'flex';
+    }
+
+    function closeFilterModal() {
+        filterPanelModal.style.display = 'none';
+    }
+
+    // Open when filter icon is clicked
+    filterBtn.addEventListener('click', openFilterModal);
+
+    // Close when the 'X' button is clicked
+    closeFilterBtn.addEventListener('click', closeFilterModal);
+    
+    // Close when clicking the dark backdrop outside the panel content
+    filterPanelModal.addEventListener('click', (e) => {
+        if (e.target === filterPanelModal) {
+            closeFilterModal();
+        }
+    });
+
+    // Optional: Prevent modal from closing if content area is clicked
+    filterContent.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+</script>
+
+</body>
+</html>

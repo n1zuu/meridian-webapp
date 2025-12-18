@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Meridian - Payment Receipt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Kapakana:wght@400;700&family=Lora:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Define color variables */
+        :root {
+            --color-primary-green: #003323;
+            --color-secondary-green: #0d5a44;
+            --color-active-bg: #EBB62D; 
+            --color-text-dark: #333333;
+            --color-background: #F8F8F8; /* Light off-white background */
+        }
+
+        /* Utility Styles */
+        .text-dark-green { color: var(--color-primary-green); }
+        .bg-active-gold { background-color: var(--color-active-bg); }
+
+        /* General Body */
+        body {
+            background-color: var(--color-background); 
+            font-family: Arial, sans-serif;
+        }
+
+        /* Receipt Card Styling */
+        .receipt-card {
+            background-color: white;
+            border-radius: 30px;
+            padding: 2rem 1.5rem;
+            width: 100%;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Checkmark Icon Container */
+        .checkmark-container {
+            position: absolute;
+            top: -30px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background-color: var(--color-active-bg);
+            border-radius: 9999px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Receipt Line Separator */
+        .receipt-line {
+            border-top: 1px dashed #E0E0E0;
+            margin: 1rem 0;
+        }
+        
+        /* Barcode Area (recreating the torn paper effect visually) */
+        .barcode-area {
+            padding-top: 1.5rem;
+            margin-top: 1rem;
+            text-align: center;
+            border-top: 2px solid #F0F0F0;
+        }
+        
+        /* Barcode SVG Style - Adjust size as needed */
+        .barcode-svg {
+            width: 100%;
+            height: 80px;
+            max-width: 300px; 
+        }
+
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center">
+
+    <div class="max-w-lg mx-auto w-full flex-grow flex flex-col p-4 pt-10">
+
+        <header class="flex items-center justify-center py-4 px-4 sticky top-0 z-20 mb-10">
+            <a href="cashier_payment_success.html" class="absolute left-4 top-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="#333333" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+            </a>
+            
+            <h1 class="text-xl font-semibold text-center text-dark-green">Payment Details</h1>
+            <div class="w-6 h-6 absolute right-4"></div> </header>
+
+        <div class="receipt-card mt-8">
+            
+            <div class="checkmark-container">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="white" class="w-8 h-8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+            </div>
+
+            <div class="mt-4 text-center">
+                <p class="text-lg text-gray-500 mb-1">Payment Total</p>
+                <p class="text-5xl font-bold text-dark-green mb-8">$95.97</p>
+            </div>
+
+            <div class="space-y-4 text-dark-green text-base">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Date</span>
+                    <span class="font-medium">December 15, 2025</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Table</span>
+                    <span class="font-medium">121</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Order ID</span>
+                    <span class="font-medium">DD082804</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Cashier</span>
+                    <span class="font-medium">Cristine Branzuela</span>
+                </div>
+            </div>
+
+            <div class="receipt-line"></div>
+
+            <div class="space-y-4 text-dark-green text-base">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Subtotal</span>
+                    <span class="font-medium">$65.97</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">VAT</span>
+                    <span class="font-medium">$10.00</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Service fee</span>
+                    <span class="font-medium">$20.00</span>
+                </div>
+            </div>
+
+            <div class="flex justify-between mt-6 pt-3 text-dark-green border-t border-gray-200">
+                <span class="text-xl font-bold">Total</span>
+                <span class="text-xl font-bold">$95.97</span>
+            </div>
+
+            <div class="barcode-area">
+                <svg class="barcode-svg mx-auto" viewBox="0 0 300 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                    <style>
+                        .bar { fill: black; }
+                    </style>
+                    <rect class="bar" x="0" y="0" width="4" height="100"/>
+                    <rect class="bar" x="6" y="0" width="2" height="100"/>
+                    <rect class="bar" x="10" y="0" width="2" height="100"/>
+                    <rect class="bar" x="14" y="0" width="4" height="100"/>
+                    <rect class="bar" x="20" y="0" width="2" height="100"/>
+                    <rect class="bar" x="24" y="0" width="2" height="100"/>
+                    <rect class="bar" x="28" y="0" width="4" height="100"/>
+                    <rect class="bar" x="34" y="0" width="2" height="100"/>
+                    <rect class="bar" x="38" y="0" width="2" height="100"/>
+                    <rect class="bar" x="42" y="0" width="4" height="100"/>
+                    <rect class="bar" x="48" y="0" width="4" height="100"/>
+                    <rect class="bar" x="54" y="0" width="2" height="100"/>
+                    <rect class="bar" x="58" y="0" width="4" height="100"/>
+                    <rect class="bar" x="64" y="0" width="2" height="100"/>
+                    <rect class="bar" x="68" y="0" width="2" height="100"/>
+                    <rect class="bar" x="72" y="0" width="4" height="100"/>
+                    <rect class="bar" x="78" y="0" width="4" height="100"/>
+                    <rect class="bar" x="84" y="0" width="2" height="100"/>
+                    <rect class="bar" x="88" y="0" width="2" height="100"/>
+                    <rect class="bar" x="92" y="0" width="4" height="100"/>
+                    <rect class="bar" x="98" y="0" width="2" height="100"/>
+                    <rect class="bar" x="102" y="0" width="4" height="100"/>
+                    <rect class="bar" x="108" y="0" width="2" height="100"/>
+                    <rect class="bar" x="112" y="0" width="4" height="100"/>
+                    <rect class="bar" x="118" y="0" width="2" height="100"/>
+                    <rect class="bar" x="122" y="0" width="2" height="100"/>
+                    <rect class="bar" x="126" y="0" width="4" height="100"/>
+                    <rect class="bar" x="132" y="0" width="2" height="100"/>
+                    <rect class="bar" x="136" y="0" width="4" height="100"/>
+                    <rect class="bar" x="142" y="0" width="2" height="100"/>
+                    <rect class="bar" x="146" y="0" width="2" height="100"/>
+                    <rect class="bar" x="150" y="0" width="4" height="100"/>
+                    <rect class="bar" x="156" y="0" width="4" height="100"/>
+                    <rect class="bar" x="162" y="0" width="2" height="100"/>
+                    <rect class="bar" x="166" y="0" width="4" height="100"/>
+                    <rect class="bar" x="172" y="0" width="2" height="100"/>
+                    <rect class="bar" x="176" y="0" width="2" height="100"/>
+                    <rect class="bar" x="180" y="0" width="4" height="100"/>
+                    <rect class="bar" x="186" y="0" width="2" height="100"/>
+                    <rect class="bar" x="190" y="0" width="4" height="100"/>
+                    <rect class="bar" x="196" y="0" width="2" height="100"/>
+                    <rect class="bar" x="200" y="0" width="2" height="100"/>
+                    <rect class="bar" x="204" y="0" width="4" height="100"/>
+                    <rect class="bar" x="210" y="0" width="4" height="100"/>
+                    <rect class="bar" x="216" y="0" width="2" height="100"/>
+                    <rect class="bar" x="220" y="0" width="2" height="100"/>
+                    <rect class="bar" x="224" y="0" width="4" height="100"/>
+                    <rect class="bar" x="230" y="0" width="4" height="100"/>
+                    <rect class="bar" x="236" y="0" width="2" height="100"/>
+                    <rect class="bar" x="240" y="0" width="4" height="100"/>
+                    <rect class="bar" x="246" y="0" width="2" height="100"/>
+                    <rect class="bar" x="250" y="0" width="2" height="100"/>
+                    <rect class="bar" x="254" y="0" width="4" height="100"/>
+                    <rect class="bar" x="260" y="0" width="4" height="100"/>
+                    <rect class="bar" x="266" y="0" width="2" height="100"/>
+                    <rect class="bar" x="270" y="0" width="4" height="100"/>
+                    <rect class="bar" x="276" y="0" width="2" height="100"/>
+                    <rect class="bar" x="280" y="0" width="2" height="100"/>
+                    <rect class="bar" x="284" y="0" width="4" height="100"/>
+                    <rect class="bar" x="290" y="0" width="2" height="100"/>
+                </svg>
+            </div>
+            
+            <div class="absolute bottom-0 left-0 right-0 h-4 bg-white" style="mask-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 4\'><defs><pattern id=\'tooth\' x=\'0\' y=\'0\' width=\'10\' height=\'4\' patternUnits=\'userSpaceOnUse\'><path d=\'M0 0h5l5 4H0z\' fill=\'black\'/></pattern></defs><rect width=\'100\' height=\'4\' fill=\'url(#tooth)\'/></svg>'); -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 4\'><defs><pattern id=\'tooth\' x=\'0\' y=\'0\' width=\'10\' height=\'4\' patternUnits=\'userSpaceOnUse\'><path d=\'M0 0h5l5 4H0z\' fill=\'black\'/></pattern></defs><rect width=\'100\' height=\'4\' fill=\'url(#tooth)\'/></svg>');"></div>
+            
+        </div>
+
+    </div>
+
+</body>
+</html>

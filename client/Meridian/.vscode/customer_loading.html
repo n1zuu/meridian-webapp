@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meridian - Loading Dashboard</title>
+    <title>Meridian - Loading Screen</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Kapakana:wght@400;700&family=Lora:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
@@ -26,6 +26,22 @@
             background-position: center;
         }
 
+        .meridian-gold-text {
+            background: linear-gradient(180deg, #FFD700 0%, #B8860B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent; 
+        }
+
+        .logo-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 250px;
+        }
+
         .logo-title {
             font-family: 'Kapakana', serif;
             font-weight: 700; 
@@ -34,19 +50,11 @@
         }
 
         .logo-script {
-            font-family: 'Lora', cursive; 
+            font-family: 'Lora', cursive;
             font-size: 2.5rem;
-            margin-top: -20px; 
+            margin-top: -20px;
             font-style: italic;
             color: #FFD700;
-        }
-        
-        .meridian-gold-text {
-            background: linear-gradient(180deg, #FFD700 0%, #B8860B 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: transparent; 
         }
 
         .logo-line {
@@ -57,6 +65,15 @@
             top: 50%; 
             transform: translateY(-50%);
         }
+
+        .leaf-decoration {
+            position: absolute;
+            font-size: 2rem; 
+            color: #FFD700; 
+            line-height: 1;
+        }
+        .leaf-left { top: 15%; left: 0; transform: rotate(10deg); }
+        .leaf-right { top: 15%; right: 0; transform: rotate(-10deg); }
 
         @keyframes loading-progress {
             0% { transform: scaleX(0); }
@@ -69,6 +86,7 @@
             opacity: 0.7;
             border-radius: 9999px;
             transform-origin: left;
+
         }
     </style>
 </head>
@@ -76,20 +94,20 @@
 
     <div id="app-container" class="landing-bg h-screen flex flex-col items-center justify-center p-4">
         
-        <div class="logo-container mb-10 relative w-[250px] flex flex-col items-center">
+        <div class="logo-container mb-10">
             <span class="logo-title meridian-gold-text">M</span>
             
             <div class="logo-line"></div>
 
-            <span class="absolute top-[15%] left-0 text-3xl text-yellow-300 rotate-[10deg]">🌿</span>
-            <span class="absolute top-[15%] right-0 text-3xl text-yellow-300 rotate-[-10deg]">🌿</span>
+            <span class="leaf-decoration leaf-left">🌿</span>
+            <span class="leaf-decoration leaf-right">🌿</span>
             
-            <span class="logo-script absolute bottom-[-50px]">Meridian</span>
+            <span class="logo-script">Meridian</span>
             
-            <div class="mt-8 relative w-full flex justify-center pt-10">
+            <div class="mt-8 relative w-full flex justify-center">
                 <div class="w-2/3 h-px bg-yellow-300"></div>
-                <div class="absolute bottom-[35px] -left-1 w-2 h-2 rounded-full bg-yellow-300"></div>
-                <div class="absolute bottom-[35px] -right-1 w-2 h-2 rounded-full bg-yellow-300"></div>
+                <div class="absolute -bottom-1 -left-1 w-2 h-2 rounded-full bg-yellow-300"></div>
+                <div class="absolute -bottom-1 -right-1 w-2 h-2 rounded-full bg-yellow-300"></div>
             </div>
         </div>
         
@@ -100,12 +118,16 @@
     </div>
 
     <script>
+
+        const loadingBar = document.getElementById('loading-bar');
+
         const loadingDuration = 2000;
+
         document.querySelector('.loading-bar').style.animation = `loading-progress ${loadingDuration / 1000}s linear forwards`;
 
         setTimeout(() => {
-            // MODIFIED: Redirects to cashier_dashboard.html as requested
-            window.location.href = 'cashier_dashboard.html';
+            // UPDATED: Redirect to the new customer dashboard
+            window.location.href = 'customer_dashboard.html';
         }, loadingDuration);
     </script>
 

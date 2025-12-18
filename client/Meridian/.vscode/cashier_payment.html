@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Meridian - Payment Methods</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Kapakana:wght@400;700&family=Lora:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Define color variables */
+        :root {
+            --color-primary-green: #003323;
+            --color-secondary-green: #0d5a44;
+            --color-active-bg: #EBB62D; 
+            --color-text-dark: #333333;
+            --color-background: #F8F8F8; /* Light off-white background */
+        }
+
+        /* Utility Styles */
+        .text-dark-green { color: var(--color-primary-green); }
+        .bg-active-gold { background-color: var(--color-active-bg); }
+
+        /* Gradient for Order Total Card */
+        .order-total-bg {
+            background-image: linear-gradient(90deg, #4CAF50 0%, #81C784 100%); 
+            color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Payment Card Styling */
+        .payment-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.1s;
+            cursor: pointer;
+        }
+        .payment-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .payment-card.selected {
+             border: 2px solid var(--color-active-bg);
+        }
+
+        /* Icon Styling */
+        .payment-icon {
+            width: 28px;
+            height: 28px;
+            margin-right: 1rem;
+        }
+
+        /* Checkmark Styling */
+        .checkmark {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* --- NEW CHECKMARK STYLES TO MATCH SCREENSHOT --- */
+        
+        /* Inactive Checkmark: Light gray circle outline */
+        .checkmark-inactive {
+             stroke: #D1D5DB; /* Gray-300 for the outline stroke */
+             fill: none;
+             stroke-width: 2;
+        }
+
+        /* Active Checkmark: Dark green check inside a colored circle */
+        .checkmark-active {
+             stroke: var(--color-secondary-green); /* Dark green for the check */
+             fill: #D1D5DB; /* Light gray fill for the circle background */
+             stroke-width: 2; /* Adjust stroke thickness for the checkmark path */
+        }
+        /* The checkmark path for the active state */
+        .checkmark-active path {
+            stroke-width: 2; 
+        }
+        
+        /* Select Button */
+        .select-button {
+            background-color: var(--color-active-bg);
+            color: white;
+            padding: 1rem;
+            border-radius: 9999px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            width: 100%;
+            transition: background-color 0.15s;
+            text-align: center;
+            display: block;
+        }
+        .select-button:hover {
+            background-color: #DDAA1F;
+        }
+
+        /* Fixed Footer Container Style */
+        .fixed-footer-container {
+             padding: 1rem;
+             border-top: none; 
+        }
+
+        /* General Body */
+        body {
+            background-color: var(--color-background); 
+            padding-bottom: 90px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="max-w-lg mx-auto p-4">
+
+        <header class="flex items-center justify-between py-4 mb-6">
+            <a href="cashier_order.html" class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-dark-green">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+            </a>
+            
+            <h1 class="text-xl font-semibold text-center flex-grow text-dark-green">Payment Methods</h1>
+            <div class="w-6 h-6"></div> </header>
+
+        <div class="order-total-bg flex justify-between items-center mb-8">
+            <span class="text-2xl font-bold">Order Total</span>
+            <span class="text-3xl font-bold">$95.97</span>
+        </div>
+
+        <h2 class="text-lg font-semibold text-dark-green mb-4">Select Payment Mode</h2>
+        
+        <div class="space-y-3">
+            
+            <div class="payment-card flex items-center justify-between" 
+                 onclick="selectPaymentMethod(this, 'cash')" 
+                 data-payment="cash">
+                <div class="flex items-center">
+                    <span class="payment-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-green-600">
+                            <path fill-rule="evenodd" d="M2.5 6.75a3 3 0 013-3h15a.75.75 0 010 1.5H5.5a1.5 1.5 0 00-1.5 1.5v10.5a1.5 1.5 0 001.5 1.5h15a.75.75 0 010 1.5h-15a3 3 0 01-3-3V6.75zM12 9a3 3 0 100 6 3 3 0 000-6zM12 11a1 1 0 110 2 1 1 0 010-2z" clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                    <span class="text-base font-medium text-dark-green">Cash</span>
+                </div>
+                <svg id="check-cash" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="checkmark checkmark-inactive" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10" />
+                </svg>
+            </div>
+            
+            <div class="payment-card flex items-center justify-between" 
+                 onclick="selectPaymentMethod(this, 'paypal')" 
+                 data-payment="paypal">
+                <div class="flex items-center">
+                    <span class="payment-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-blue-600">
+                            <rect x="3" y="3" width="18" height="18" rx="4"/>
+                            <text x="12" y="15" font-family="Arial" font-weight="bold" font-size="10" fill="white" text-anchor="middle">P</text>
+                        </svg>
+                    </span>
+                    <span class="text-base font-medium text-dark-green">Paypal</span>
+                </div>
+                <svg id="check-paypal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="checkmark checkmark-inactive" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10" />
+                </svg>
+            </div>
+            
+            <div class="payment-card flex items-center justify-between" 
+                 onclick="selectPaymentMethod(this, 'gcash')" 
+                 data-payment="gcash">
+                <div class="flex items-center">
+                    <span class="payment-icon">
+                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-cyan-600">
+                            <rect x="3" y="3" width="18" height="18" rx="4"/>
+                            <text x="12" y="15" font-family="Arial" font-weight="bold" font-size="10" fill="white" text-anchor="middle">G</text>
+                        </svg>
+                    </span>
+                    <span class="text-base font-medium text-dark-green">GCash</span>
+                </div>
+                <svg id="check-gcash" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="checkmark checkmark-inactive" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10" />
+                </svg>
+            </div>
+
+            <div class="payment-card flex items-center justify-between selected" 
+                 onclick="selectPaymentMethod(this, 'card')" 
+                 data-payment="card">
+                <div class="flex items-center">
+                    <span class="payment-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-red-500">
+                            <path d="M4.5 3.75a3 3 0 00-3 3v10.5a3 3 0 003 3h15a3 3 0 003-3V6.75a3 3 0 00-3-3h-15zm.5 1.5a.5.5 0 01.5-.5h14a.5.5 0 01.5.5v2a.5.5 0 01-.5.5h-14a.5.5 0 01-.5-.5v-2zm-1 6.5a.5.5 0 01.5-.5h15a.5.5 0 01.5.5v2a.5.5 0 01-.5.5h-15a.5.5 0 01-.5-.5v-2z" />
+                        </svg>
+                    </span>
+                    <span class="text-base font-medium text-dark-green">Credit/Debit Cards</span>
+                </div>
+                <svg id="check-card" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="checkmark checkmark-active" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10" fill="currentColor" stroke="none"/>
+                    <path d="M8.25 12.75L10.5 15l5.25-5.25" stroke="var(--color-secondary-green)"/>
+                </svg>
+            </div>
+            
+        </div>
+        
+        <div class="fixed bottom-0 left-0 right-0 max-w-lg mx-auto fixed-footer-container">
+             <a href="cashier_payment_success.html" id="selectButton" class="select-button"> 
+                Select Payment Method
+             </a>
+        </div>
+
+    </div>
+
+    <script>
+        const activeCheckSvgContent = (color) => `
+            <circle cx="12" cy="12" r="10" fill="#D1D5DB" stroke="none"/>
+            <path d="M8.25 12.75L10.5 15l5.25-5.25" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        `;
+        const inactiveCheckSvgContent = `<circle cx="12" cy="12" r="10" />`;
+
+        function selectPaymentMethod(selectedElement, paymentType) {
+            const allCards = document.querySelectorAll('.payment-card');
+            const allChecks = document.querySelectorAll('.checkmark');
+            const activeColor = 'var(--color-secondary-green)'; // Dark green
+
+            // 1. Deselect all cards
+            allCards.forEach(card => {
+                card.classList.remove('selected');
+            });
+
+            // 2. Select the clicked card
+            selectedElement.classList.add('selected');
+
+            // 3. Reset all checkmarks to inactive (circle outline)
+            allChecks.forEach(check => {
+                check.classList.remove('checkmark-active');
+                check.classList.add('checkmark-inactive');
+                check.innerHTML = inactiveCheckSvgContent;
+                check.setAttribute('stroke', '#D1D5DB'); // Ensure stroke color is gray
+            });
+
+            // 4. Activate the checkmark for the selected card
+            const activeCheck = document.querySelector(`#check-${paymentType}`);
+            
+            activeCheck.classList.remove('checkmark-inactive');
+            activeCheck.classList.add('checkmark-active');
+            
+            // Set the content for the active checkmark
+            activeCheck.innerHTML = activeCheckSvgContent(activeColor);
+        }
+
+        // Initialize the selection on load (Credit/Debit Card is initially selected)
+        window.onload = function() {
+            const initialCard = document.querySelector('[data-payment="card"]');
+            selectPaymentMethod(initialCard, 'card');
+        }
+    </script>
+
+</body>
+</html>

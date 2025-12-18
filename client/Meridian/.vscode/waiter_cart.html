@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meridian - Current Order</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Kapakana:wght@400;700&family=Lora:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+
+        :root {
+            --meridian-dark-green: #3b5a44;
+            --meridian-gold: #FFD700;
+            --page-background: #F4F4F6; /* Use light background for body */
+        }
+
+        body {
+            background-color: var(--page-background); 
+            font-family: Arial, sans-serif;
+            color: #1a1a1a; 
+        }
+
+        .header-bar {
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .back-icon {
+            color: #1a1a1a;
+            width: 24px;
+            height: 24px;
+        }
+
+        .item-row {
+            /* Styles for individual items in the cart */
+            padding: 1rem 0;
+            border-bottom: 1px solid #e5e5e5;
+            background-color: #FFFFFF;
+        }
+
+        .item-name {
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        .note-box {
+            background-color: #FFFFFF; 
+            border: 1px solid #d1d5db; 
+            border-radius: 8px;
+            padding: 1rem;
+            color: #1a1a1a;
+            min-height: 100px;
+        }
+        
+        .note-box textarea {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            resize: none;
+            background-color: transparent;
+            font-size: 0.95rem;
+        }
+
+        .note-box textarea::placeholder {
+            color: #9ca3af;
+        }
+
+        .note-title {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtotal-row {
+            color: #1a1a1a;
+            font-weight: 400;
+        }
+
+        .total-row {
+            color: var(--meridian-gold);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .place-order-button {
+            background-color: var(--meridian-gold);
+            color: #1a1a1a;
+            font-weight: 600;
+            padding: 1rem;
+            border-radius: 9999px;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        .place-order-button:hover {
+            background-color: #EAC117; /* Slightly darker gold on hover */
+        }
+        
+        .cart-item-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .qty-controls-small {
+            display: flex;
+            align-items: center;
+            border: 1px solid #d1d5db;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .qty-controls-small button {
+            padding: 0.25rem 0.5rem;
+            background-color: #f7f7f7;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.1s;
+        }
+        .qty-controls-small button:active {
+            background-color: #e5e5e5;
+        }
+        .qty-controls-small span {
+            padding: 0 0.5rem;
+            font-size: 1rem;
+            min-width: 20px;
+            text-align: center;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="min-h-screen flex flex-col">
+        
+        <header class="header-bar sticky top-0 z-10 p-4">
+            <div class="max-w-xl mx-auto flex items-center justify-between">
+                <a href="waiter_dashboard.html" class="flex items-center">
+                    <svg class="back-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                    </svg>
+                </a>
+                <h1 class="text-xl font-semibold flex-grow text-center pr-6">Orders</h1>
+                <div style="width: 24px;"></div> 
+            </div>
+        </header>
+
+        <main class="flex-grow max-w-xl mx-auto w-full p-4 space-y-6">
+            
+            <div id="cart-items-container" class="bg-white rounded-lg shadow-sm">
+                </div>
+
+            <div>
+                <p class="note-title">Note to restaurant</p>
+                <div class="note-box">
+                    <textarea id="order-note" placeholder="Add your request (subject to restaurant's discretion"></textarea>
+                </div>
+            </div>
+
+            <div class="item-row flex justify-between items-center bg-white rounded-lg shadow-sm cursor-pointer border-t-0">
+                <a href="waiter_dashboard.html" class="flex justify-between items-center w-full p-4">
+                    <span class="text-lg text-orange-500 font-medium">Add more items</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-gray-400">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                </a>
+            </div>
+
+            <div class="bg-white p-4 rounded-lg shadow-sm space-y-2">
+                
+                <div class="subtotal-row flex justify-between text-base">
+                    <span>Subtotal</span>
+                    <span id="subtotal-value">$0.00</span>
+                </div>
+                
+                <div class="subtotal-row flex justify-between text-base">
+                    <span>VAT (10%)</span>
+                    <span id="vat-value">$0.00</span>
+                </div>
+                
+                <div class="subtotal-row flex justify-between text-base">
+                    <span>Service fee (5%)</span>
+                    <span id="service-fee-value">$0.00</span>
+                </div>
+                
+                <div class="total-row flex justify-between pt-2 border-t border-dashed border-gray-300">
+                    <span>Total</span>
+                    <span id="total-value" class="text-gold">$0.00</span>
+                </div>
+            </div>
+
+        </main>
+
+        <footer class="sticky bottom-0 bg-white p-4 shadow-xl">
+            <div class="max-w-xl mx-auto">
+                <button class="place-order-button" id="place-order-button">
+                    Place Order
+                </button>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        const CART_KEY = 'meridian_waiter_cart';
+        const FOOD_DATA_KEY = 'meridian_food_data';
+
+        const cartItemsContainer = document.getElementById('cart-items-container');
+        const subtotalValueEl = document.getElementById('subtotal-value');
+        const vatValueEl = document.getElementById('vat-value');
+        const serviceFeeValueEl = document.getElementById('service-fee-value');
+        const totalValueEl = document.getElementById('total-value');
+        const placeOrderButton = document.getElementById('place-order-button');
+
+
+        const VAT_RATE = 0.10; // 10% VAT
+        const SERVICE_FEE_RATE = 0.05; // 5% Service fee
+
+        function getCart() {
+            const cartString = localStorage.getItem(CART_KEY);
+            return cartString ? JSON.parse(cartString) : {};
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
+            renderCart(); // Re-render the cart every time it is saved
+        }
+        
+        function clearCart() {
+            localStorage.removeItem(CART_KEY);
+        }
+
+        function getFoodData() {
+            const foodDataString = localStorage.getItem(FOOD_DATA_KEY);
+            return foodDataString ? JSON.parse(foodDataString) : {};
+        }
+
+        function updateItemQuantity(foodId, change) {
+            const cart = getCart();
+            let newQuantity = (cart[foodId] || 0) + change;
+
+            if (newQuantity <= 0) {
+                delete cart[foodId]; // Remove item if quantity is 0 or less
+            } else {
+                cart[foodId] = newQuantity;
+            }
+
+            saveCart(cart);
+        }
+
+        function formatCurrency(amount) {
+            return `$${amount.toFixed(2)}`;
+        }
+
+        function renderCart() {
+            const cart = getCart();
+            const foodData = getFoodData();
+            let subtotal = 0;
+            let cartHtml = '';
+            let itemCounter = 0;
+
+            for (const foodId in cart) {
+                const quantity = cart[foodId];
+                if (quantity > 0 && foodData[foodId]) {
+                    const item = foodData[foodId];
+                    const itemPrice = item.price;
+                    const itemTotal = itemPrice * quantity;
+                    subtotal += itemTotal;
+                    itemCounter++;
+
+                    cartHtml += `
+                        <div class="item-row flex justify-between items-center p-4 border-b ${itemCounter === 1 ? 'rounded-t-lg' : ''} border-gray-100">
+                            <div class="flex-grow">
+                                <p class="item-name">${item.name}</p>
+                                <p class="text-sm text-gray-500">${formatCurrency(itemPrice)} ea.</p>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="qty-controls-small">
+                                    <button onclick="updateItemQuantity('${foodId}', -1)">−</button>
+                                    <span id="qty-${foodId}">${quantity}</span>
+                                    <button onclick="updateItemQuantity('${foodId}', 1)">+</button>
+                                </div>
+                                <span class="font-semibold text-lg">${formatCurrency(itemTotal)}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            if (itemCounter === 0) {
+                // Display empty cart message
+                cartHtml = `
+                    <div class="p-4 text-gray-500 italic">
+                        <p>Your order is currently empty. Add items from the menu!</p>
+                    </div>
+                `;
+            }
+
+            cartItemsContainer.innerHTML = cartHtml;
+            
+            // --- Calculate and Display Totals ---
+            const vat = subtotal * VAT_RATE;
+            const serviceFee = subtotal * SERVICE_FEE_RATE;
+            const total = subtotal + vat + serviceFee;
+
+            subtotalValueEl.textContent = formatCurrency(subtotal);
+            vatValueEl.textContent = formatCurrency(vat);
+            serviceFeeValueEl.textContent = formatCurrency(serviceFee);
+            totalValueEl.textContent = formatCurrency(total);
+            
+            
+            if (itemCounter === 0) {
+                placeOrderButton.disabled = true;
+                placeOrderButton.style.opacity = 0.5;
+            } else {
+                placeOrderButton.disabled = false;
+                placeOrderButton.style.opacity = 1;
+            }
+        }
+        
+        // --- Place Order Click Handler ---
+        placeOrderButton.addEventListener('click', function() {
+            if (this.disabled) return;
+
+            // In a real application, you would send the order data to the server here.
+            
+            // 1. Clear the cart in local storage
+            clearCart(); 
+            
+            // 2. Redirect to the success page
+            window.location.href = 'waiter_place_order_successfully.html';
+        });
+
+        document.addEventListener('DOMContentLoaded', renderCart);
+    </script>
+</body>
+</html>

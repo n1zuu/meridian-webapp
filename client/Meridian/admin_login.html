@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meridian - Sign In As</title>
+    <title>Meridian - Admin Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Kapakana:wght@400;700&family=Lora:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
@@ -27,11 +27,9 @@
         }
 
         .meridian-script {
-
             font-family: 'Kapakana', cursive; 
-            font-size: 4rem;
+            font-size: 4rem; 
             line-height: 1;
-
             background: linear-gradient(180deg, #FFD700 0%, #B8860B 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -42,22 +40,45 @@
 
         .tagline-style {
             font-family: 'Lora', serif;
+            color: #FFD700;
         }
 
-        .heading-style {
-            font-family: Arial, sans-serif;
+        .input-field {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: #003323;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px; 
+            width: 100%;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            font-size: 1.125rem;
+            outline: none;
+            transition: all 0.2s;
         }
 
-        .button-style {
+        .input-field::placeholder {
+            color: rgba(0, 0, 0, 0.4);
+            font-style: italic;
+        }
+        
+        .input-field:focus {
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.5);
+        }
+
+        .btn-login {
             background-color: #003323;
             border: 2px solid #FFD700;
             color: #FFD700;
+            padding: 0.75rem 3rem; 
+            border-radius: 9999px; 
             transition: all 0.2s ease-in-out;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); 
+            font-size: 1.25rem;
+            font-weight: 600; 
+            letter-spacing: 0.05em; 
         }
-
-        .button-style:hover {
-            background-color: #0d5a44;
+        .btn-login:hover {
+            background-color: #0d5a44; 
             transform: translateY(-1px);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 0 15px rgba(255, 215, 0, 0.6);
         }
@@ -75,29 +96,31 @@
             <h1 class="meridian-script">
                 Meridian
             </h1>
-            <p class="tagline-style text-yellow-300 text-sm md:text-base italic mt-1 tracking-widest opacity-90">
+            <p class="tagline-style text-sm md:text-base italic mt-1 tracking-widest opacity-90">
                 "Where cuisine meets class"
             </p>
         </div>
 
-        <p class="heading-style text-yellow-300 text-xl font-semibold mb-6 tracking-wider drop-shadow-md">
-            Sign-in As
-        </p>
-
-        <div class="flex flex-col space-y-4 w-full max-w-sm">
+        <form action="loading_waiter_dashboard.html" method="get" class="flex flex-col space-y-5 w-full max-w-sm">
             
-            <a href="loading_role.html?role=manager" class="button-style w-full py-3 px-6 rounded-full font-semibold text-lg tracking-wider heading-style text-center">
-                Manager
-            </a>
+            <input 
+                type="email" 
+                class="input-field" 
+                placeholder="E-mail address" 
+                required
+            >
             
-            <a href="loading_role.html?role=waiter" class="button-style w-full py-3 px-6 rounded-full font-semibold text-lg tracking-wider heading-style text-center">
-                Waiter
-            </a>
+            <input 
+                type="password" 
+                class="input-field" 
+                placeholder="Password" 
+                required
+            >
             
-            <a href="loading_role.html?role=cashier" class="button-style w-full py-3 px-6 rounded-full font-semibold text-lg tracking-wider heading-style text-center">
-                Cashier
-            </a>
-        </div>
+            <button type="submit" class="btn-login mt-6 self-center w-48">
+                Log In
+            </button>
+        </form>
 
     </div>
 

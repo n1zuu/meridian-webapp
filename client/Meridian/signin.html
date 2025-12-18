@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meridian - Landing Page</title>
+    <title>Meridian - Sign In As</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Kapakana:wght@400;700&family=Lora:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
     
     <style>
-  
+
         .landing-bg {
-            background-color: #0b4f3b; 
+            background-color: #0d5a44; 
             background-image: radial-gradient(
                 circle at 80% 20%, 
                 rgba(255, 223, 100, 0.2) 0%, 
@@ -22,43 +22,44 @@
                 #003323 0%, 
                 #0d5a44 100%
             ); 
+            background-size: cover;
+            background-position: center;
         }
 
-        .meridian-text {
-            font-family: 'Kapakana', serif;
-            font-weight: 700; 
-            font-size: 4rem; 
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
+        .meridian-script {
+
+            font-family: 'Kapakana', cursive; 
+            font-size: 4rem;
+            line-height: 1;
 
             background: linear-gradient(180deg, #FFD700 0%, #B8860B 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             color: transparent; 
-            line-height: 1;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
         }
 
-        .subtext-style {
+        .tagline-style {
             font-family: 'Lora', serif;
         }
 
-        @media (max-width: 640px) {
-            .meridian-text {
-                font-size: 3rem;
-            }
+        .heading-style {
+            font-family: Arial, sans-serif;
         }
 
         .button-style {
-            background-color: #0d5a44;
+            background-color: #003323;
             border: 2px solid #FFD700;
             color: #FFD700;
             transition: all 0.2s ease-in-out;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
 
         .button-style:hover {
-            background-color: #003323;
+            background-color: #0d5a44;
             transform: translateY(-1px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 0 15px rgba(255, 215, 0, 0.6);
         }
 
         #app-container {
@@ -70,24 +71,32 @@
 
     <div id="app-container" class="landing-bg flex flex-col items-center justify-center p-4">
         
-        <div class="mb-12 md:mb-20 text-center">
-            <h1 class="meridian-text">
+        <div class="mb-16 md:mb-24 text-center">
+            <h1 class="meridian-script">
                 Meridian
             </h1>
-            <p class="subtext-style text-xl md:text-2xl text-yellow-300 italic mt-[-10px] opacity-80">
+            <p class="tagline-style text-yellow-300 text-sm md:text-base italic mt-1 tracking-widest opacity-90">
                 "Where cuisine meets class"
             </p>
         </div>
 
+        <p class="heading-style text-yellow-300 text-xl font-semibold mb-6 tracking-wider drop-shadow-md">
+            Sign-in As
+        </p>
+
         <div class="flex flex-col space-y-4 w-full max-w-sm">
             
-            <button class="button-style w-full py-3 px-6 rounded-full font-semibold text-lg md:text-xl tracking-wider">
-                Sign In
-            </button>
-
-            <button class="button-style w-full py-3 px-6 rounded-full font-semibold text-lg md:text-xl tracking-wider">
-                Use As Guest
-            </button>
+            <a href="loading_role.html?role=manager" class="button-style w-full py-3 px-6 rounded-full font-semibold text-lg tracking-wider heading-style text-center">
+                Manager
+            </a>
+            
+            <a href="loading_role.html?role=waiter" class="button-style w-full py-3 px-6 rounded-full font-semibold text-lg tracking-wider heading-style text-center">
+                Waiter
+            </a>
+            
+            <a href="loading.html" class="button-style w-full py-3 px-6 rounded-full font-semibold text-lg tracking-wider heading-style text-center">
+                Cashier
+            </a>
         </div>
 
     </div>
